@@ -79,7 +79,6 @@ h1 {
     justify-items: right;
     float: right;
     margin-right: 5%;
-    display: compact;
     width: 20%;
 
 }
@@ -107,6 +106,19 @@ h1 {
 footer h3 {
     margin-top: 16rem;
     text-align: center;
+    font-family: "Bai Jamjuree";
+}
+.popup {
+  display: none;
+  background:  rgba(255, 255, 255, 0.4);
+}
+
+.props button {
+    margin: 3px;
+    padding: 5px;
+    background: black;
+    border-radius: 9px;
+    color: #D8DBBD;
     font-family: "Bai Jamjuree";
 }
 
