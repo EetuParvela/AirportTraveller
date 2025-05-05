@@ -18,7 +18,6 @@ async function submitPlayers() {
 
     const data = await response.json();
     console.log("Players submitted:", data);
-    // Optionally update UI or transition game state here
 
   } catch (error) {
     console.error("Failed to submit players:", error);

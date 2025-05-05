@@ -1,37 +1,21 @@
-import utils as gm
+import database as db
 
 class Player:
-    cruise_speed = 833
-    fuel_consumption = 889.571769
-    co2_per_l = 2.52
-
-    def __init__(self, name):
+    def __init__(self, name, start_airport):
         self.name = name
+        self.current_airport = start_airport
         self.stats = PlayerStats()
 
-    def fly_to(self, destination):
-        coordinates = (destination["latitude_deg"], destination["longitude_deg"])
-        distance = gm.calculate_distance(self.stats.location, coordinates)
-
-        fuel_needed = self.calculate_fuel(distance)
-        co2_emitted = self.calculate_co2(fuel_needed)
-        points_earned = self.calculate_points(distance)
-
-        if self.stats.use_fuel(fuel_needed):
-            self.stats.update_location(coordinates)
-            self.stats.update_score(points_earned)
-            self.stats.update_co2(co2_emitted)
-            self.stats.update_distance(distance)
-            return True
-        else:
-            print(f"{self.name} doesn't have enough fuel to fly to {destination['name']}!")
-            return False
-
+    @staticmethod
     def calculate_fuel(self, distance):
-        return (distance / self.cruise_speed) * self.fuel_consumption
+        cruise_speed = 833
+        fuel_consumption = 889.571769
+        return (distance / cruise_speed) * fuel_consumption
 
+    @staticmethod
     def calculate_co2(self, fuel_used):
-        return fuel_used * self.co2_per_l
+        co2_per_l = 2.52
+        return fuel_used * co2_per_l
 
     @staticmethod
     def calculate_points(distance):

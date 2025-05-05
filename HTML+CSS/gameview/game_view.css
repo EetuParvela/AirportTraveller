@@ -1,50 +1,51 @@
 
 html {
 
-       font-family: "Handlee", cursive;
-       font-weight: 400;
-       font-style: normal;
+    font-family: "Handlee", cursive;
+    font-weight: 400;
+    font-style: normal;
 }
+
 #map {
     justify-content: center;
-    height:600px;
+    height: 600px;
     width: 1400px;
     margin-top: 3.2%;
-    margin-left:3.2%;
-    margin-bottom:20%;
+    margin-left: 3.2%;
+    margin-bottom: 20%;
     border-radius: 20px;
     border: black;
 
 
-
-
-
 }
+
 body {
-    background-image:url("corkboard1.jpg");
+    background-image: url("corkboard1.jpg");
     background-size: 100%;
 }
+
 .maplist {
     display: flex;
 }
 
 
 .postit {
-  width: 150px;
-  height: 300px;
-  padding: 10px;
-  margin: 20px;
-  float: left;
-  font-size: 16px;
-  box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
-  transform: rotate(-2deg);
-  transition: transform 0.2s;
-  border: 1px solid #ccc;
+    width: 150px;
+    height: 300px;
+    padding: 10px;
+    margin: 20px;
+    float: left;
+    font-size: 16px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    transform: rotate(-2deg);
+    transition: transform 0.2s;
+    border: 1px solid #ccc;
 }
 
 .postit:hover {
-  transform: scale(1.05) rotate(0deg);
+    transform: scale(1.05) rotate(0deg);
 }
+
 .info {
     margin-top: 5%;
     display: flex;
@@ -52,10 +53,12 @@ body {
     gap: 20px;
 
 }
+
 .yellow h5 {
     margin-bottom: 20px;
     font-size: 20px;
 }
+
 .yellow {
     display: flex;
     flex-direction: column;
@@ -66,15 +69,17 @@ body {
     overflow: hidden;
 
 }
+
 .airportdata {
     display: flex;
     flex-direction: column;
 }
-.yellow button{
+
+.yellow button {
     border-radius: 9px;
     background: red;
     color: white;
-    font-size:13px;
+    font-size: 13px;
     padding: 15px;
     padding-bottom: 30px;
     width: 60px;
@@ -84,27 +89,30 @@ body {
 }
 
 .pink {
-   position: absolute;
+    position: absolute;
     top: 10px;
-  background-color: #ffc0cb;
-   width: 600px;
-   height: 300px;
+    background-color: #ffc0cb;
+    width: 600px;
+    height: 300px;
     margin-top: 700px;
     margin-left: 5%;
 }
 
 .blue {
-  background-color: #add8e6;
-  width:250px;
-  height: 400px;
+    background-color: #add8e6;
+    width: 250px;
+    height: 400px;
 }
+
 .blue h5 {
     margin-bottom: 20px;
     font-size: 20px;
 }
+
 .blue ol {
     padding-left: 10px;
 }
+
 .blue li {
     margin-bottom: 20px;
 }
@@ -112,15 +120,18 @@ body {
 .green {
     background: #4CAF50;
     width: 250px;
-    height:250px;
+    height: 250px;
 }
-.green h5{
+
+.green h5 {
     margin-bottom: 20px;
     font-size: 20px;
 }
+
 .green ul {
     padding-left: 9px;
 }
-.green li{
-    margin-bottom:20px ;
+
+.green li {
+    margin-bottom: 20px;
 }

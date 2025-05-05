@@ -30,8 +30,6 @@
 
             <p>ICAO: ${marker.icao}</p>
             <p>Country: ${marker.country_name}</p>
-            <p>Weather: ${marker.weather["main"]}</p>
-            <p>Temperature: ${marker.weather["temp"]} celsius</p>
             <button type="button">Fly</button>
 
 
@@ -40,6 +38,5 @@
     });
   })
   .catch(err => console.error('Fetch error:', err));
-
 
 
