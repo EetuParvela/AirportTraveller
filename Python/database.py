@@ -29,7 +29,7 @@ def get_db_cursor(conn):
     finally:
         cursor.close()
 
-
+# Palauttaa lentokentän tiedot
 def get_airport_info(icao):
     airport_data = None
     welcome_phrase = None
@@ -73,7 +73,7 @@ def get_airport_info(icao):
         return None
 
 
-# Hankkii 5 lähintä lentokenttää pelaajaan
+# Palauttaa 5 lähintä lentokenttää pelaajaan
 def get_closest_airports(current_icao):
 
     with get_db_connection() as conn:
@@ -85,7 +85,7 @@ def get_closest_airports(current_icao):
 
             current_coords = (current['latitude_deg'], current['longitude_deg'])
 
-            # Hankkii kaikki lentokentät tietokannasta
+            # Hakee kaikki lentokentät tietokannasta
             cursor.execute("""
                 SELECT a.ident, a.name AS airport_name, a.latitude_deg, a.longitude_deg, c.name AS country_name
                 FROM eu_airports a
@@ -103,10 +103,12 @@ def get_closest_airports(current_icao):
             airports.sort(key=lambda x: x['distance_km'])
             return airports[:5]
 
-
+# Palauttaa kaikki lentokentät tietokannasta
 def get_all_airports():
+
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
+
             cursor.execute("""
                 SELECT a.ident, a.name AS airport_name, a.latitude_deg, a.longitude_deg, c.name AS country_name
                 FROM eu_airports a
