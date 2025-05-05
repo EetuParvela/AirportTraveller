@@ -1,0 +1,68 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+   background:linear-gradient(to bottom,#2A3663,#B59F78);
+ }
+.selection {
+    text-align: center;
+    display: flex;
+}
+.player label{
+    white-space: nowrap;
+    font-family: "Bai Jamjuree";
+    font-size: 2rem;
+    color: #D8DBBD;
+}
+
+.player {
+    margin-top:20%;
+    margin-right: 20%;
+    margin-left: 20%;
+    margin-bottom: 15%;
+
+
+
+}
+.player p {
+    font-size: 15rem;
+    margin: 0;
+}
+.player1 p{
+    color: Blue;
+}
+.player2 p {
+    color: red;
+}
+
+
+
+.start {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    margin-bottom:3rem;
+}
+
+
+.start button {
+    font-size: 3rem;
+    padding: 20px;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    background: #2A3663;
+    border-radius: 9px;
+    color: #D8DBBD;
+}
+
+
+
