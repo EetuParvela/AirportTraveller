@@ -18,6 +18,9 @@ class GameManager:
     def get_current_player(self):
         return self.players[self.current_player]
 
+    def get_current_player_data(self):
+        return self.players[self.current_player]
+
 
 def airport_infos():
     airports = get_all_airports()

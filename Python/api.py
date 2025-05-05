@@ -7,6 +7,14 @@ from game import player_data, destination
 
 app = Flask(__name__)
 CORS(app)
+game = game.Game()
+
+
+@app.route("/start_game", methods=['GET'])
+def start_game():
+    game.run()
+    game.game_state = "started"
+    return jsonify({"Message": "Game started"})
 
 
 @app.route("/get_name", methods=["POST"])
@@ -14,6 +22,7 @@ def get_names():
     data = request.get_json()
     player_data["player1"] = data.get('uname1')
     player_data["player2"] = data.get('uname2')
+    game.game_state = "ongoing"
 
     return jsonify({"message": "Players recieved"}), 200
 
@@ -23,6 +32,16 @@ def get_airport_info():
     airports = game.airports
 
     return jsonify(airports), 200
+
+
+@app.route("/get_single_airport/<icao>", methods=["GET"])
+def airport_info(icao):
+    if not icao:
+        return jsonify({"error": "Missing required parameter: icao"}), 400
+
+    result = db.get_airport_info(icao)
+
+    return jsonify(result), 200
 
 
 @app.route("/fly_to", methods=["POST"])
@@ -39,16 +58,6 @@ def closest_airports(icao):
         return jsonify({"error": "Missing required parameter: icao"}), 400
 
     result = db.get_closest_airports(icao)
-
-    return jsonify(result), 200
-
-
-@app.route("/get_airport_info/<icao>", methods=["GET"])
-def airport_info(icao):
-    if not icao:
-        return jsonify({"error": "Missing required parameter: icao"}), 400
-
-    result = db.get_airport_info(icao)
 
     return jsonify(result), 200
 

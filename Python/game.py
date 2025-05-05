@@ -4,11 +4,14 @@ import player as pl
 from Python.player import Player
 
 airports = gm.airport_infos()
+game_state = ""
 
 player_data = {}
 destination = {}
 
 class GameState(Enum):
+    GAME_START = auto()
+    NAME_SELECT = auto()
     START_TURN = auto()
     FLY = auto()
     APPLY_BONUS = auto()
@@ -16,9 +19,9 @@ class GameState(Enum):
     SWITCH_PLAYER = auto()
     GAME_OVER = auto()
 
-class Peli:
+class Game:
     def __init__(self):
-        self.state = GameState.START_TURN
+        self.state = GameState.GAME_START
         self.current_player = 0
         self.players = [
             Player(player_data["player1"]),
@@ -34,6 +37,13 @@ class Peli:
         player = self.players[self.current_player]
 
         match self.state:
+            case GameState.GAME_START:
+                if game_state == "started":
+                    self.state = GameState.NAME_SELECT
+
+            case GameState.NAME_SELECT:
+                if game_state == "ongoing":
+                    self.state = GameState.START_TURN
 
             case GameState.START_TURN:
                 print(f"\nPlayer {self.current_player + 1}'s turn begins.")

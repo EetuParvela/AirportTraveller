@@ -72,6 +72,19 @@ def get_airport_info(icao):
     else:
         return None
 
+# Palauttaa kaikki lentokentät tietokannasta
+def get_all_airports():
+
+    with get_db_connection() as conn:
+        with get_db_cursor(conn) as cursor:
+
+            cursor.execute("""
+                SELECT a.ident, a.name AS airport_name, a.latitude_deg, a.longitude_deg, c.name AS country_name
+                FROM eu_airports a
+                JOIN country c ON a.iso_country = c.iso_country
+                """)
+            airports = cursor.fetchall()
+            return airports
 
 # Palauttaa 5 lähintä lentokenttää pelaajaan
 def get_closest_airports(current_icao):
@@ -102,17 +115,3 @@ def get_closest_airports(current_icao):
             # Järjestää ja palauttaa 5 lähintä lentokenttää
             airports.sort(key=lambda x: x['distance_km'])
             return airports[:5]
-
-# Palauttaa kaikki lentokentät tietokannasta
-def get_all_airports():
-
-    with get_db_connection() as conn:
-        with get_db_cursor(conn) as cursor:
-
-            cursor.execute("""
-                SELECT a.ident, a.name AS airport_name, a.latitude_deg, a.longitude_deg, c.name AS country_name
-                FROM eu_airports a
-                JOIN country c ON a.iso_country = c.iso_country
-                """)
-            airports = cursor.fetchall()
-            return airports
