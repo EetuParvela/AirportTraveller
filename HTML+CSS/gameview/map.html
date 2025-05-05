@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href=map1.css>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Patrick+Hand+SC&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+
+
+</head>
+<body>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+
+<section class="maplist">
+    <div id="map"></div>
+    <div class="info">
+        <div class="postit blue">
+            <h5>Suggestions</h5>
+            <ol>
+                <li>first place icao long 12.345 lat 1234.</li>
+                <li>first place icao long 12.345 lat 1234.</li>
+                <li>first place icao long 12.345 lat 1234.</li>
+                <li>first place icao long 12.345 lat 1234.</li>
+                <li>first place icao long 12.345 lat 1234.</li>
+            </ol>
+        </div>
+        <div class="postit green">
+            <h5>"playername" Stats</h5>
+            <ul>
+                <li>Km:4000</li>
+                <li>co2:234</li>
+                <li>points:40000</li>
+                <li>current location: North Korea</li>
+            </ul>
+
+        </div>
+        <div class="postit yellow">
+            <div class="airportdata">
+                <h5>Tervetuloa</h5>
+                <p> Icao: efhk, Helsinki, kylmä ja sadetta, Suomi.</p>
+            </div>
+            <button type="button">Lennä</button>
+        </div>
+    </div>
+</section>
+<section class="bonustats">
+    <div class="postit pink">Bonus</div>
+</section>
+
+
+<script>
+
+  var bounds = L.latLngBounds(
+      [36.0, -25.0],
+      [72.0, 45.0],
+  );
+
+  var map = L.map('map', {
+    minZoom: 4.5,
+    maxZoom: 3.5,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+  }).setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+      fetch('http://localhost:5000/markers')
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(marker => {
+          L.marker([marker.lat, marker.lng]).addTo(map).bindPopup(marker.name);
+        });
+      });
+</script>
+
+</body>
+</html>

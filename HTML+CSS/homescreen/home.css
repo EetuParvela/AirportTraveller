@@ -44,12 +44,21 @@ h1 {
     color: #D8DBBD;
 
 }
+.view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
 .start {
     display: flex;
     text-align: center;
     justify-content: center;
     justify-items: center;
     margin-top: 20rem;
+    padding:0;
+    width:80% ;
+    margin-left: 20%;
 
 }
 .start button {
@@ -62,15 +71,39 @@ h1 {
     font-family: "Bai Jamjuree";
     color:#D8DBBD ;
     box-shadow: 1px 1px 1px 1px #2A3663;
+
 }
 
 .leaderboard {
-    background: white;
     justify-content: right;
     justify-items: right;
     float: right;
-}
+    margin-right: 5%;
+    display: compact;
+    width: 20%;
 
+}
+.leaderboard h4 {
+    font-size: 40px;
+    font-family: "Bai Jamjuree";
+    color: #D8DBBD;
+    margin-right: 2.5rem;
+}
+.leaderboard ol {
+    background: #FAF6E3;
+    float: left;
+    padding-left: 2rem;
+    padding-top: 9px;
+    padding-bottom:9px;
+    padding-right: 2rem;
+    border-radius: 9px;
+}
+.leaderboard li {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #2A3663;
+    font-family: "Bai Jamjuree";
+}
 footer h3 {
     margin-top: 16rem;
     text-align: center;
