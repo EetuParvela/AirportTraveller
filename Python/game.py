@@ -3,7 +3,7 @@ import game_manager as gm
 import player as pl
 from Python.player import Player
 
-airports = gm.get_all_airports()
+airports = gm.airport_infos()
 
 player_data = {}
 destination = {}

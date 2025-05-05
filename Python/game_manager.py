@@ -41,7 +41,7 @@ def airport_infos():
 
 def get_weather_data(lat, lon):
     load_dotenv()
-    api_key = os.getenv("weather_api_key")
+    api_key = os.getenv("api_key")
     request = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={api_key}"
     answer = requests.get(request)
     weather_data = answer.json()

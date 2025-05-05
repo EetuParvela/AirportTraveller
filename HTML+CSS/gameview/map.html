@@ -63,27 +63,50 @@
 <script>
 
   var bounds = L.latLngBounds(
-      [36.0, -25.0],
-      [72.0, 45.0],
+      [30.0, -18.0],
+      [55.0, 45.0],
   );
 
   var map = L.map('map', {
-    minZoom: 4.5,
-    maxZoom: 3.5,
+    minZoom: 3,
+    maxZoom: 10,
     maxBounds: bounds,
     maxBoundsViscosity: 1.0,
-  }).setView([51.505, -0.09], 13);
+  }).setView([51.505, -0.09], 3);
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
-      fetch('http://localhost:5000/markers')
+
+  fetch('http://localhost:3000/get_airport_info')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data); // Check what's actually returned
+    data.forEach(marker => {
+      L.marker([marker['lat'],marker['lon']])
+        .addTo(map)
+        .bindPopup(marker.name);
+    });
+  })
+  .catch(err => console.error("Fetch error:", err));
+
+
+
+
+
+
+
+
+
+
+
+      fetch('http://127.0.0.1:3000/get_airport_info')
       .then(res => res.json())
       .then(data => {
         data.forEach(marker => {
-          L.marker([marker.lat, marker.lng]).addTo(map).bindPopup(marker.name);
+          L.marker([marker['latitude_deg'], marker["longitude_deg"]]).addTo(map).bindPopup(marker.name);
         });
       });
 </script>
