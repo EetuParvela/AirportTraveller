@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pelinäkymä</title>
+    <title>Title</title>
     <link rel="stylesheet" href=game_view.css>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Patrick+Hand+SC&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
-    <script src="game_view.js"></script>
+    <script src="game_view.js" defer> </script>
+
+
 </head>
 <body>
+
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -19,6 +22,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
+
 
 <section class="maplist">
     <div id="map"></div>
@@ -43,12 +47,11 @@
             </ul>
 
         </div>
-        <div class="postit yellow">
+        <div id="yellow" class="postit yellow">
             <div class="airportdata">
-                <h5>Tervetuloa</h5>
-                <p> Icao: efhk, Helsinki, kylmä ja sadetta, Suomi.</p>
+                <h5></h5>
+                <p></p>
             </div>
-            <button type="button">Lennä</button>
         </div>
     </div>
 </section>

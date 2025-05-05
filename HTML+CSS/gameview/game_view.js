@@ -16,28 +16,66 @@ function drawMap() {
     }).addTo(map);
 }
 
-async function getAirportInfo() {
-    try {
-        const response = await fetch('http://localhost:3000/get_airport_info');
-        const data = await response.json();
+let selectedMarker = null; // Global
 
-        data.forEach(marker => {
-            const lat = marker.lat || marker.latitude_deg;
-            const lon = marker.lon || marker.longitude_deg;
-            if (lat && lon) {
-                L.marker([lat, lon]).addTo(map).bindPopup(marker.name || "Unnamed");
-            }
-        });
-    } catch (error) {
-        console.error(error);
-    }
+function loadAirportMarkers(map) {
+  fetch('http://localhost:3000/get_airport_info')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(marker => {
+        L.marker([marker.lat, marker.lon])
+          .addTo(map)
+          .bindPopup(marker.name)
+          .on('click', () => {
+            selectedMarker = marker; // Store clicked marker
+
+            document.getElementById('yellow').innerHTML = `
+              <h5>Tervetuloa</h5>
+              <h5>${marker.name}</h5>
+              <p>ICAO: ${marker.icao}</p>
+              <p>Country: ${marker.country_name}</p>
+              <p>Weather: ${marker.weather.main}</p>
+              <p>Temperature: ${marker.weather.temp} Celsius</p>
+              <button type="button" onclick="flyToAirport()">Fly</button>
+            `;
+          });
+      });
+    });
 }
+
+async function flyToAirport() {
+  if (!selectedMarker) {
+    alert("No airport selected!");
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/fly', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedMarker) // Send full marker info
+    });
+
+    const result = await response.json();
+    console.log("Flight response:", result);
+    alert(`Flying to ${selectedMarker.name}!`);
+
+  } catch (error) {
+    console.error("Error sending flight data:", error);
+  }
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     drawMap();
-    getAirportInfo();
+    loadAirportMarkers()
 });
 
-async function getCurrentPlayerStat() {
 
-}
+
+
+
+
+

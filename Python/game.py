@@ -1,5 +1,5 @@
 from enum import Enum, auto
-import game_manager as gm
+import utils as gm
 import player as pl
 from Python.player import Player
 

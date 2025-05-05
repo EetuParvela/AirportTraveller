@@ -3,23 +3,6 @@ import requests
 from geopy.distance import geodesic
 from dotenv import load_dotenv
 from database import get_all_airports
-from player import Player
-
-class GameManager:
-    def __init__(self):
-        self.players = {}
-        self.current_player = None
-        self.state = None
-
-    def add_player(self, name):
-        player_id = len(self.players) + 1
-        self.players[player_id] = Player(name)
-
-    def get_current_player(self):
-        return self.players[self.current_player]
-
-    def get_current_player_data(self):
-        return self.players[self.current_player]
 
 
 def airport_infos():
@@ -33,10 +16,6 @@ def airport_infos():
             "country_name": airport["country_name"],
             "lat": airport["latitude_deg"],
             "lon": airport["longitude_deg"],
-            "weather": {
-                "main": weather["weather"][0]["main"],
-                "temp": weather["main"]["temp"]
-            }
         }
         airport_data_list.append(airport_info)
 

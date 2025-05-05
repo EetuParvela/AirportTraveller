@@ -1,45 +1,50 @@
-import game_manager as gm
-
+import utils as gm
 
 class Player:
+    cruise_speed = 833
+    fuel_consumption = 889.571769
+    co2_per_l = 2.52
+
     def __init__(self, name):
         self.name = name
         self.stats = PlayerStats()
 
     def fly_to(self, destination):
-        coordinates = destination["latitude_deg"], destination["longitude_deg"]
+        coordinates = (destination["latitude_deg"], destination["longitude_deg"])
         distance = gm.calculate_distance(self.stats.location, coordinates)
-        cruise_speed = 833 # Nopeus km/h
-        fuel_consumption = 889.571769
-        fuel_needed = distance / cruise_speed * fuel_consumption
 
-        co2_per_l = 2.52
-        co2_emitted = fuel_needed * co2_per_l
-
-        points_earned = distance * (1 + (distance / 2000))
+        fuel_needed = self.calculate_fuel(distance)
+        co2_emitted = self.calculate_co2(fuel_needed)
+        points_earned = self.calculate_points(distance)
 
         if self.stats.use_fuel(fuel_needed):
-            self.stats.location = destination
+            self.stats.update_location(coordinates)
             self.stats.update_score(points_earned)
             self.stats.update_co2(co2_emitted)
             self.stats.update_distance(distance)
+            return True
         else:
-            print(f"{self.name} doesn't have enough fuel to fly to {destination}!")
+            print(f"{self.name} doesn't have enough fuel to fly to {destination['name']}!")
+            return False
 
-    def __str__(self):
-        return (f"Player: {self.name}\n"
-                f"Location: {self.stats.location}\n"
-                f"Fuel: {self.stats.fuel}\n"
-                f"Score: {self.stats.score}")
+    def calculate_fuel(self, distance):
+        return (distance / self.cruise_speed) * self.fuel_consumption
+
+    def calculate_co2(self, fuel_used):
+        return fuel_used * self.co2_per_l
+
+    @staticmethod
+    def calculate_points(distance):
+        return distance * (1 + (distance / 2000))
 
 
 class PlayerStats:
     def __init__(self):
         self.location = []
-        self.fuel = 0
-        self.score = 0
-        self.co2 = 0
-        self.distance = 0
+        self.fuel = 0.0
+        self.score = 0.0
+        self.co2 = 0.0
+        self.distance = 0.0
 
     def update_location(self, new_location):
         self.location = new_location
@@ -58,3 +63,4 @@ class PlayerStats:
 
     def update_distance(self, amount):
         self.distance += amount
+
