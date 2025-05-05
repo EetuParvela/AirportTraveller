@@ -17,8 +17,13 @@
     <h1> AIRPORT TRAVELLER </h1>
     <section class="view">
         <div class="start">
-            <button type="button">START</button>
+            <button onclick="playerSelect()">START</button>
         </div>
+        <script>
+            function playerSelect() {
+              window.location.href = 'playerselect.html'
+            }
+        </script>
         <aside class="leaderboard">
             <h4> Highscores</h4>
             <ol id="leaderboard">

@@ -1,43 +1,45 @@
-let map;
 
-function drawMap() {
-    const bounds = L.latLngBounds([30.0, -18.0], [55.0, 45.0]);
 
-    map = L.map('map', {
-        minZoom: 3,
-        maxZoom: 10,
-        maxBounds: bounds,
-        maxBoundsViscosity: 1.0
-    }).setView([51.505, -0.09], 3);
+  const bounds = L.latLngBounds(
+      [30.0, -18.0],
+      [55.0, 45.0],
+  );
 
-    L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-}
+  const map = L.map('map', {
+    minZoom: 3,
+    maxZoom: 10,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+  }).setView([51.505, -0.09], 3);
 
-async function getAirportInfo() {
-    try {
-        const response = await fetch('http://localhost:3000/get_airport_info');
-        const data = await response.json();
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
 
-        data.forEach(marker => {
-            const lat = marker.lat || marker.latitude_deg;
-            const lon = marker.lon || marker.longitude_deg;
-            if (lat && lon) {
-                L.marker([lat, lon]).addTo(map).bindPopup(marker.name || "Unnamed");
-            }
-        });
-    } catch (error) {
-        console.error(error);
-    }
-}
+  fetch('http://localhost:3000/get_airport_info').then(res => res.json()).then(data => {
+    data.forEach(marker => {
+      L.marker([marker['lat'], marker['lon']])
+      .addTo(map)
+      .bindPopup(marker.name)
+      .on('click', () => {
 
-document.addEventListener('DOMContentLoaded', () => {
-    drawMap();
-    getAirportInfo();
-});
+        document.getElementById('yellow').innerHTML = `
+            <h5>Tervetuloa</h5>
+            <h5>${marker.name}</h5>
 
-async function getCurrentPlayerStat() {
+            <p>ICAO: ${marker.icao}</p>
+            <p>Country: ${marker.country_name}</p>
+            <p>Weather: ${marker.weather["main"]}</p>
+            <p>Temperature: ${marker.weather["temp"]} celsius</p>
+            <button type="button">Fly</button>
 
-}
+
+            `;
+      });
+    });
+  })
+  .catch(err => console.error('Fetch error:', err));
+
+
+
