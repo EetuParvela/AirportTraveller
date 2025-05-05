@@ -6,7 +6,6 @@ import game
 from game import player_data, destination
 
 app = Flask(__name__)
-CORS(app)
 
 
 @app.route("/get_name", methods=["POST"])
