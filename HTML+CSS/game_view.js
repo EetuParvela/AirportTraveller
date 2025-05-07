@@ -82,5 +82,51 @@ function flyToAirport() {
         longitude_deg: airport.longitude_deg,
       },
     }),
-  };
+  })}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const pinkPostit = document.querySelector(".postit.pink");
+
+    //on 40% tödennäköisyys saada nopan
+    if (Math.random() < 0.4 && pinkPostit) {
+        pinkPostit.innerHTML = `
+            <h2>🎉 Vau!</h2>
+            <h3>Sait mahdollisuus tuplata pisteitä, jos nopasta tulee 4 tai enemmän.</h3>
+            <h3>Klikkaa noppaa nähdäksesi tuloksen!</h3>
+            <img id="dice" class="dice" src="image/R.png" alt="Dice">
+            <h3 id="resultMsg"></h3>
+        `;
+        const dice = document.getElementById("dice");
+        const resultMsg = document.getElementById("resultMsg");
+        let tossAllowed = true;
+
+        dice.addEventListener("click", () => {
+           if (!tossAllowed) return;
+           tossAllowed = false;
+
+            const roll = Math.floor(Math.random() * 6) + 1;
+            dice.src = `image/${roll}.png`;
+            dice.alt = `Roll ${roll}`;
+
+            if (roll >= 4) {
+                resultMsg.textContent = "✅ Yes! Pisteet tuplattiin!";
+                resultMsg.style.color = "green";
+            } else {
+                resultMsg.textContent = "❌ Valitettavasti ei tärpännyt tällä kertaa!";
+                resultMsg.style.color = "red";
+            }
+
+            setTimeout(() => {
+                tossAllowed = true;
+            }, 5000);
+        });
+    }
+});
+
+
+
+
+
+
 
