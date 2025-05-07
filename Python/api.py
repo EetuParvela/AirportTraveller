@@ -47,13 +47,21 @@ def change_player_location():
 
     return jsonify({"message": "Player flew to next airport"}), 200
 
-@app.route("/change_player_stats", methods=["POST"])
-def change_player_stats():
-    data = request.get_json()
-    current_player = data["current_player"]
-    next_location = data["next_location"]
+@app.route('/change_player_stats/<player>', methods=['POST'])
+def change_player_stats(player):
+    try:
+        data = request.get_json()
 
-    game_instance.change_player_stats(current_player, next_location)
+        current_player = game_instance.current_player
+        next_location = data.get("next_location")
+
+        game_instance.change_player_stats(current_player, next_location)
+
+        return jsonify({'status': 'success', 'message': 'Player stats updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+
 
 @app.route("/change_turn", methods=["GET"])
 def change_turn():

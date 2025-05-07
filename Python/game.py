@@ -5,7 +5,7 @@ import database as db
 class GameState:
     def __init__(self):
         self.players = []
-        self.current_player = 0  # 0 on pelaaja 1, 1 on pelaaja 2
+        self.current_player = 1  # 1 on pelaaja 1, 2 on pelaaja 2
         self.player1 = None
         self.player2 = None
         self.airports = None
@@ -47,10 +47,12 @@ class GameState:
         else:
             return False
 
-    @staticmethod
-    def change_player_stats(player, next_location):
-        distance = db.calculate_distance((player.current_airport["latitude_deg"],
-                                          player.current_airport["longitude_deg"]),
+    def change_player_stats(self, player, next_location):
+        current_player = self.players[player]
+
+
+        distance = db.calculate_distance((current_player["current_airport"]["latitude_deg"],
+                                          current_player["current_airport"]["longitude_deg"]),
                                          (next_location["latitude_deg"],
                                           next_location["longitude_deg"]))
 
@@ -75,3 +77,4 @@ def calculate_info(distance, multiplier):
     earned_points = distance * (0.1 + distance / 1000) * multiplier
 
     return earned_points, fuel_used, co2_emitted
+

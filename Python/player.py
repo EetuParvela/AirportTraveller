@@ -12,6 +12,16 @@ class Player:
             return True
         return False
 
+    def get_stats(self):
+        return {
+            "name": self.name,
+            "current_airport": self.current_airport,
+            "fuel": self.fuel,
+            "score": self.score,
+            "co2": self.co2,
+            "total_distance": self.total_distance
+        }
+
     def update_airport_data(self, next_airport):
         self.current_airport = next_airport
 
