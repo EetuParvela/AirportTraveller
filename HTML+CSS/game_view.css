@@ -14,12 +14,10 @@ html {
     margin-bottom: 20%;
     border-radius: 20px;
     border: black;
-
-
 }
 
 body {
-    background-image: url("corkboard1.jpg");
+    background-image: url("EndScreen/image/corkboard1.jpg");
     background-size: 100%;
 }
 
@@ -39,6 +37,7 @@ body {
     transform: rotate(-2deg);
     transition: transform 0.2s;
     border: 1px solid #ccc;
+
 }
 
 .postit:hover {
@@ -134,3 +133,26 @@ body {
 .green li {
     margin-bottom: 20px;
 }
+
+#dice {
+    width: 20%;
+    font-size: 6vw;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-bottom: 10px;
+}
+
+#dice:hover {
+    transform: scale(1.1);
+}
+
+#resultMsg {
+
+    margin-top: 1px;
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+.pink h3 {
+    margin: 5px 0;
+}
+
