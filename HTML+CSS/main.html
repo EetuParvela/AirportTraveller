@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="home.css">
+    <script src="main.js" defer></script>
 </head>
 <body>
 <header>
@@ -11,35 +12,28 @@
         <ul>
             <li>
 
-              <button onclick="showInstructions()">Show Instructions</button>
+                <button onclick="showInstructions()">Show Instructions</button>
 
-              <div id="iPopup" class="popup">
-                <div class="popup-box">
-                  <p>Welcome to the game! Select your character, then click START to begin.
-                    Make sure to follow the on-screen prompts during gameplay.
-                  </p>
-                  <button onclick="closeInstructions()">OK</button>
+                <div id="iPopup" class="popup">
+                    <div class="popup-box">
+                        <p>Welcome to the game! Select your character, then click START to begin.
+                            Make sure to follow the on-screen prompts during gameplay.
+                        </p>
+                        <button onclick="closeInstructions()">OK</button>
+                    </div>
                 </div>
-              </div>
             </li>
             <li><a href="git">Github</a></li>
         </ul>
-    </nav>>
-
-
-
-
-
-
-
-
+    </nav>
+    >
 
 
 </header>
 <h1> AIRPORT TRAVELLER </h1>
 <section class="view">
     <div class="start">
-        <button onclick="playerSelect()">START</button>
+        <button id="playerSelectButton" onclick="playerSelect()">PLAYER SELECT</button>
     </div>
     <aside class="leaderboard">
         <h4> Highscores</h4>
@@ -53,19 +47,18 @@
     </aside>
 </section>
 <footer>
-    <h3> © Lauri Labbas, Eetu Parvela, Dmytro Levshukov, Eetu Henriksson </h3>
+    <h3> © Lauri Labbas, Eetu Parvela, Dmytro Levshukov </h3>
 </footer>
 
 
 <script>
-        function showInstructions() {
-          document.getElementById('iPopup').style.display = 'flex';
-        }
-      
-        function closeInstructions() {
-          document.getElementById('iPopup').style.display = 'none';
-        }
+  function showInstructions() {
+    document.getElementById('iPopup').style.display = 'flex';
+  }
 
+  function closeInstructions() {
+    document.getElementById('iPopup').style.display = 'none';
+  }
 
   function playerSelect() {
     window.location.href = 'playerselect.html';

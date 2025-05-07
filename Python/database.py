@@ -31,10 +31,13 @@ def get_db_cursor(conn):
     finally:
         cursor.close()
 
-def calculate_distance(current_coords, target_coords):
+
+def calculate_distance(current, target_coords):
     target_coords = (target_coords['latitude_deg'], target_coords['longitude_deg'])
+    current_coords = (current["latitude_deg"], current["longitude_deg"])
     distance = geodesic(current_coords, target_coords).kilometers
     return distance
+
 
 def get_weather(lat, lon):
     api_key = os.getenv("API_KEY")  # Suositellaan käytettäväksi ympäristömuuttujia
@@ -48,25 +51,23 @@ def get_weather(lat, lon):
         "main": data["weather"][0]["main"],
         "description": data["weather"][0]["description"],
         "temp": data["main"]["temp"]
-        }
+    }
+
 
 # Hankkii yhden lentokentän tiedot tietokannasta
 def get_airport_info(icao):
-
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
-
             cursor.execute(
                 """
-                SELECT 
-                    c.name AS country_name,
-                    a.name AS airport_name,
-                    a.latitude_deg,
-                    a.longitude_deg,
-                    cw.welcome_phrase
+                SELECT c.name AS country_name,
+                       a.name AS airport_name,
+                       a.latitude_deg,
+                       a.longitude_deg,
+                       cw.welcome_phrase
                 FROM eu_airports a
-                INNER JOIN country c ON c.iso_country = a.iso_country
-                LEFT JOIN country_welcome cw ON cw.iso_country = a.iso_country
+                         INNER JOIN country c ON c.iso_country = a.iso_country
+                         LEFT JOIN country_welcome cw ON cw.iso_country = a.iso_country
                 WHERE a.ident = %s
                 """, (icao,)
             )
@@ -92,29 +93,33 @@ def get_all_airports():
         with get_db_cursor(conn) as cursor:
 
             cursor.execute("""
-                SELECT 
-                    a.ident,
-                    a.name AS airport_name,
-                    a.latitude_deg,
-                    a.longitude_deg,
-                    c.name AS country_name,
-                    cw.welcome_phrase
-                FROM eu_airports a
-                JOIN country c ON a.iso_country = c.iso_country
-                LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
-            """)
+                           SELECT a.ident,
+                                  a.name AS airport_name,
+                                  a.latitude_deg,
+                                  a.longitude_deg,
+                                  c.name AS country_name,
+                                  cw.welcome_phrase
+                           FROM eu_airports a
+                            JOIN country c ON a.iso_country = c.iso_country
+                            LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
+                           """)
             airport_data = cursor.fetchall()
 
-            weather_data = get_weather(airport_data['latitude_deg'], airport_data['longitude_deg'])
+            airports = []
+            for row in airport_data:
+                weather = get_weather(row['latitude_deg'], row['longitude_deg'])
+                airports.append({
+                    "icao": row['ident'],
+                    "country_name": row['country_name'],
+                    "airport_name": row['airport_name'],
+                    "latitude_deg": row['latitude_deg'],
+                    "longitude_deg": row['longitude_deg'],
+                    "welcome_phrase": row['welcome_phrase'],
+                    "weather": weather
+                })
 
-            return {
-                "country_name": airport_data['country_name'],
-                "airport_name": airport_data['airport_name'],
-                "latitude_deg": airport_data['latitude_deg'],
-                "longitude_deg": airport_data['longitude_deg'],
-                "welcome_phrase": airport_data['welcome_phrase'],
-                "weather": weather_data
-            }
+            return airports
+
 
 # Palauttaa 5 lähintä lentokenttää pelaajaan
 def get_closest_airports(current_icao):
@@ -130,15 +135,15 @@ def get_closest_airports(current_icao):
 
             # Hakee kaikki lentokentät tietokannasta
             cursor.execute("""
-                SELECT a.ident, 
-                       a.name AS airport_name, 
-                       a.latitude_deg, 
-                       a.longitude_deg, 
-                       c.name AS country_name
-                FROM eu_airports a
-                JOIN country c ON a.iso_country = c.iso_country
-                WHERE a.ident != %s
-            """, (current_icao,))
+                           SELECT a.ident,
+                                  a.name AS airport_name,
+                                  a.latitude_deg,
+                                  a.longitude_deg,
+                                  c.name AS country_name
+                           FROM eu_airports a
+                                    JOIN country c ON a.iso_country = c.iso_country
+                           WHERE a.ident != %s
+                           """, (current_icao,))
             airports = cursor.fetchall()
 
             # Laskee kenttien välisen matkan
