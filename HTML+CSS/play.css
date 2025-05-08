@@ -1,56 +1,83 @@
-
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body {
-  height: 100%;
+    height: 100%;
+    font-family: "Handlee", cursive;
+    font-weight: 400;
+    font-style: normal;
+
 }
 
 body {
-   background:linear-gradient(to bottom,#2A3663,#B59F78);
- }
+    background: linear-gradient(to bottom, #2A3663, #B59F78);
+    background-image: url("corkboard1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+
+}
+
 .selection {
     text-align: center;
     display: flex;
+    width: 150px;
+
+
 }
-.player label{
+
+.player label {
     white-space: nowrap;
-    font-family: "Bai Jamjuree";
-    font-size: 2rem;
-    color: #D8DBBD;
+    font-size: 3rem;
 }
 
 .player {
-    margin-top:20%;
-    margin-right: 20%;
-    margin-left: 20%;
-    margin-bottom: 15%;
-
-
-
+    margin-top: 200px;
+    margin-bottom: 250px;
+    width: 200px;
+    height: 300px;
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    transform: rotate(-2deg);
+    transition: transform 0.2s;
+    border: 1px solid #ccc;
+    background: coral;
 }
+
+.player:hover {
+    transform: scale(1.05) rotate(0deg);
+}
+
 .player p {
-    font-size: 15rem;
+    font-size: 9rem;
     margin: 0;
 }
-.player1 p{
+
+.blue p {
     color: Blue;
 }
-.player2 p {
+
+.red p {
     color: red;
 }
 
+.blue {
+    margin-left: 500px;
+    margin-right: 300px;
 
+}
 
 .start {
     display: flex;
     text-align: center;
     justify-content: center;
-    justify-items: center;
-    margin-bottom:3rem;
+/ justify-items: center;
+/ margin-bottom: 0;
 }
 
 
@@ -63,6 +90,3 @@ body {
     border-radius: 9px;
     color: #D8DBBD;
 }
-
-
-

@@ -17,7 +17,7 @@ html {
 }
 
 body {
-    background-image: url("EndScreen/image/corkboard1.jpg");
+    background-image: url("corkboard1.jpg");
     background-size: 100%;
 }
 
@@ -156,3 +156,6 @@ body {
     margin: 5px 0;
 }
 
+.endTurnButton {
+
+}

@@ -129,9 +129,9 @@ def get_closest_airports(current_icao):
 
             # Hakee nykyisen lentokentän tiedot
             cursor.execute("SELECT latitude_deg, longitude_deg FROM eu_airports WHERE ident = %s", (current_icao,))
-            current = cursor.fetchone()
+            current = cursor.fetchall()
 
-            current_coords = (current['latitude_deg'], current['longitude_deg'])
+            current_coords = (current[0]['latitude_deg'], current[0]['longitude_deg'])
 
             # Hakee kaikki lentokentät tietokannasta
             cursor.execute("""
@@ -139,17 +139,19 @@ def get_closest_airports(current_icao):
                                   a.name AS airport_name,
                                   a.latitude_deg,
                                   a.longitude_deg,
-                                  c.name AS country_name
-                           FROM eu_airports a
-                                    JOIN country c ON a.iso_country = c.iso_country
+                                  c.name AS country_name,
+                                  cw.welcome_phrase
+                            FROM eu_airports a
+                            JOIN country c ON a.iso_country = c.iso_country
+                            LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
                            WHERE a.ident != %s
                            """, (current_icao,))
             airports = cursor.fetchall()
 
             # Laskee kenttien välisen matkan
             for airport in airports:
-                target_coords = (airport['latitude_deg'], airport['longitude_deg'])
-                airport['distance_km'] = calculate_distance(current_coords, target_coords)
+                target_coords = (airport["latitude_deg"], airport["longitude_deg"])
+                airport['distance_km'] = geodesic(current_coords, target_coords).kilometers
 
             # Järjestää ja palauttaa 5 lähintä lentokenttää
             airports.sort(key=lambda x: x['distance_km'])

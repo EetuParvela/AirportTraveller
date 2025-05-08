@@ -5,7 +5,6 @@ document.getElementById("playerSelectButton").addEventListener("click", async ()
 
     if (response.ok) {
       console.log("Airport data loaded:", data.airports);
-      // Now you can render markers on the map or pass data to game state
     } else {
       console.error("Failed to start game", data);
     }

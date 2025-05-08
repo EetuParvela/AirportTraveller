@@ -39,23 +39,18 @@ def get_names():
     }), 200
 
 
-@app.route("/fly_to", methods=["POST"])
-def change_player_location():
-    data = request.get_json()
-    destination = data
-    game_instance.fly_to(destination)
-
-    return jsonify({"message": "Player flew to next airport"}), 200
-
-@app.route('/change_player_stats/<player>', methods=['POST'])
-def change_player_stats(player):
+@app.route('/change_player_stats', methods=['POST'])
+def change_player_stats():
     try:
         data = request.get_json()
 
         current_player = game_instance.current_player
-        next_location = data.get("next_location")
+        icao = data.get("ident")
+        next_location = db.get_airport_info(icao)
+        print(next_location)
 
         game_instance.change_player_stats(current_player, next_location)
+        print(game_instance.get_current_player_stats())
 
         return jsonify({'status': 'success', 'message': 'Player stats updated successfully'}), 200
 
@@ -63,9 +58,13 @@ def change_player_stats(player):
         return jsonify({'status': 'error', 'message': str(e)}), 400
 
 
-@app.route("/change_turn", methods=["GET"])
-def change_turn():
-    game_instance.check_if_ended()
+@app.route("/get_bonus", methods=["POST"])
+def get_bonus():
+    data = request.get_json()
+    game_instance.multiplier = 2
+
+    return jsonify({"message": "Dice roll number recieved"})
+
 
 @app.route("/get_current_player", methods=["GET"])
 def get_current_player_info():
@@ -73,11 +72,18 @@ def get_current_player_info():
 
     return jsonify(player), 200
 
+@app.route("/get_player_stats", methods=["GET"])
+def get_player_stats():
+    data = game_instance.get_current_player_stats()
+
+    return jsonify(data), 200
+
 @app.route("/get_all_airport_info", methods=["GET"])
 def get_every_airport():
     airports = db.get_all_airports()
 
     return jsonify(airports), 200
+
 
 @app.route("/get_airports_from_cache", methods=["GET"])
 def get_airports_from_cache():

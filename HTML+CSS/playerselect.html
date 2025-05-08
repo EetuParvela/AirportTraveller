@@ -7,34 +7,29 @@
     <title>Title</title>
 </head>
 <body>
-    <section class="selection">
-        <div class="player">
-            <div class="player1">
-                <label for="uname1">Player 1:</label>
-                <input type="text" id="uname1" name="uname" required>
-                <p>&#9679</p>
-            </div>
-        </div>
-        <div class="player">
-            <div class="player2">
-                <label for="uname2">Player 2:</label>
-                <input type="text" id="uname2" name="uname" required>
-                <p>&#9679</p>
-            </div>
-        </div>
-
-
-    </section>
-    <div class="start">
-    <button id="startGameButton" onclick="playerSelect()">START GAME</button>
+<section class="selection">
+    <div class="player blue">
+        <label for="uname1">Player 1:</label>
+        <input type="text" id="uname1" name="uname" required>
+        <p>&#9679</p>
+    </div>
+    <div class="player red">
+        <label for="uname2">Player 2:</label>
+        <input type="text" id="uname2" name="uname" required>
+        <p>&#9679</p>
     </div>
 
-        <script>
-            function playerSelect() {
-              window.location.href = 'game_view.html';
-            }
-        </script>
 
+</section>
+<div class="start">
+    <button id="startGameButton" onclick="playerSelect()">START GAME</button>
+</div>
+
+<script>
+  function playerSelect() {
+    window.location.href = 'game_view.html';
+  }
+</script>
 
 
 </body>
