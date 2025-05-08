@@ -105,11 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }).then(data => {
         const diceRoll = data.roll;
 
-        const roll = Math.floor(Math.random() * 6) + 1;
-        dice.src = `image/${roll}.png`;
-        dice.alt = `Roll ${roll}`;
+        dice.src = `image/${diceRoll}.png`;
+        dice.alt = `Roll ${diceRoll}`;
 
-        if (roll >= 4) {
+        if (diceRoll >= 4) {
           resultMsg.textContent = '✅ Yes! Pisteet tuplattiin!';
           resultMsg.style.color = 'green';
         } else {

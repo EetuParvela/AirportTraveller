@@ -63,8 +63,9 @@ def get_bonus():
     data = request.get_json()
     game_instance.multiplier = 2
 
-    return jsonify({"message": "Dice roll number recieved"})
-
+    import random
+    roll = random.randint(1, 6)
+    return jsonify({"roll": roll}), 200
 
 @app.route("/get_current_player", methods=["GET"])
 def get_current_player_info():
