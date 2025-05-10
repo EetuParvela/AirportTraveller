@@ -1,10 +1,11 @@
 import database as db
 
+
 class Player:
     def __init__(self, name):
         self.name = name
         self.location = None
-        self.money = 0
+        self.money = 10000
         self.co2 = 0
         self.places_visited = 0
 
@@ -15,13 +16,15 @@ class Player:
         self.money = money
 
     def update_co2(self, amount):
-        self.co2 = amount
+        self.co2 += amount
 
     def get_player_stats(self):
+        name = self.name
         location = self.location
         money = self.money
         co2 = self.co2
-        return location, money, co2
+        places_visited = self.places_visited
+        return name, location, money, co2, places_visited
 
     def check_is_over(self):
         if self.places_visited == 15:
@@ -36,9 +39,7 @@ class GameState:
 
     def start_game(self, name):
         self.player = Player(name)
-
-    def update_days_left(self):
-        self.days += 1
+        self.player.location = db.get_airport_info("EFHK")
 
     def get_distance(self, icao):
         current_airport = self.player.location
@@ -51,15 +52,16 @@ class GameState:
 
     def calculate_co2(self, icao):
         distance = self.get_distance(icao)
-        co2_emitted = distance * 0.05
-        self.player.co2 = co2_emitted
+        co2_emitted = distance * 0.050
+        self.player.update_co2(co2_emitted)
 
     def fly_to(self, icao):
         if self.check_if_enough_money(icao):
             location = db.get_airport_info(icao)
             self.player.update_location(location)
             self.player.places_visited += 1
-            self.player.update_co2(location)
+            self.calculate_co2(icao)
+            print(self.player.get_player_stats())
             return True
         else:
             return False
@@ -71,9 +73,10 @@ class GameState:
 
     def check_if_enough_money(self, icao):
         distance = self.get_distance(icao)
-        money_needed = distance * 25
+        money_needed = distance * 0.5
 
-        if money_needed > self.player.money:
+        if money_needed < self.player.money:
+            self.player.update_money(money_needed)
             return True
         else:
             return False

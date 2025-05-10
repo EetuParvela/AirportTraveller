@@ -56,8 +56,10 @@ def get_weather(lat, lon):
 
 # Hankkii yhden lentokentän tiedot tietokannasta
 def get_airport_info(icao):
+
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
+
             cursor.execute(
                 """
                 SELECT c.name AS country_name,
@@ -74,7 +76,6 @@ def get_airport_info(icao):
 
             airport_data = cursor.fetchone()
 
-    if airport_data:
         return {
             "country_name": airport_data['country_name'],
             "airport_name": airport_data['airport_name'],
@@ -82,8 +83,7 @@ def get_airport_info(icao):
             "longitude_deg": airport_data['longitude_deg'],
             "welcome_phrase": airport_data['welcome_phrase']
         }
-    else:
-        return None
+
 
 
 # Palauttaa kaikki lentokentät tietokannasta

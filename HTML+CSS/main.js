@@ -6,9 +6,7 @@ async function startGame() {
   try {
     const response = await fetch('http://127.0.0.1:3000/start_game', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json',},
       body: JSON.stringify({player_name: playerName}),
     });
 
@@ -31,6 +29,7 @@ function playerSelect() {
     alert('Please enter your name before starting the game.');
   } else {
     window.location.href = 'game_view.html';
+    return name
   }
 }
 
