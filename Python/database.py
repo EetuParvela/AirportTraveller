@@ -11,8 +11,8 @@ def get_db_connection():
         host='127.0.0.1',
         port=3306,
         database='flight_game',
-        user='lauri1',
-        password='salis1',
+        user='eetu',
+        password='mdb21',
         charset="utf8mb4",
         collation="utf8mb4_general_ci",
         autocommit=True
@@ -64,7 +64,7 @@ def get_airport_info(icao):
                        a.name AS airport_name,
                        a.latitude_deg,
                        a.longitude_deg,
-                       cw.welcome_word
+                       cw.welcome_phrase
                 FROM eu_airports a
                          INNER JOIN country c ON c.iso_country = a.iso_country
                          LEFT JOIN country_welcome cw ON cw.iso_country = a.iso_country
@@ -80,7 +80,7 @@ def get_airport_info(icao):
             "airport_name": airport_data['airport_name'],
             "latitude_deg": airport_data['latitude_deg'],
             "longitude_deg": airport_data['longitude_deg'],
-            "welcome_word": airport_data['welcome_word']
+            "welcome_phrase": airport_data['welcome_phrase']
         }
     else:
         return None
@@ -98,7 +98,7 @@ def get_all_airports():
                                   a.latitude_deg,
                                   a.longitude_deg,
                                   c.name AS country_name,
-                                  cw.welcome_word
+                                  cw.welcome_phrase
                            FROM eu_airports a
                             JOIN country c ON a.iso_country = c.iso_country
                             LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
@@ -114,7 +114,7 @@ def get_all_airports():
                     "airport_name": row['airport_name'],
                     "latitude_deg": row['latitude_deg'],
                     "longitude_deg": row['longitude_deg'],
-                    "welcome_word": row['welcome_word'],
+                    "welcome_phrase": row['welcome_phrase'],
                     "weather": weather
                 })
 
@@ -140,7 +140,7 @@ def get_closest_airports(current_icao):
                                   a.latitude_deg,
                                   a.longitude_deg,
                                   c.name AS country_name,
-                                  cw.welcome_word
+                                  cw.welcome_phrase
                             FROM eu_airports a
                             JOIN country c ON a.iso_country = c.iso_country
                             LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country

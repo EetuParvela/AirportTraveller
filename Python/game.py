@@ -1,74 +1,86 @@
-from Python.player import Player
 import database as db
+
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.location = None
+        self.money = 0
+        self.co2 = 0
+        self.places_visited = 0
+
+    def update_location(self, location):
+        self.location = location
+
+    def update_money(self, money):
+        self.money = money
+
+    def update_co2(self, amount):
+        self.co2 = amount
+
+    def get_player_stats(self):
+        location = self.location
+        money = self.money
+        co2 = self.co2
+        return location, money, co2
+
+    def check_is_over(self):
+        if self.places_visited == 15:
+            return True
+        return False
 
 
 class GameState:
     def __init__(self):
-        self.players = []
-        self.current_player = 0  # 0 on pelaaja 1, 1 on pelaaja 2
-        self.multiplier = 1
-        self.player1 = None
-        self.player2 = None
-        self.airports = None
-        self.is_over = 0
+        self.days = 0
+        self.player = None
 
-    def cache_airports(self, airport_data):
-        self.airports = airport_data
+    def start_game(self, name):
+        self.player = Player(name)
 
-    def get_airports(self):
-        return self.airports
+    def update_days_left(self):
+        self.days += 1
 
-    def get_current_player(self):
-        return self.current_player
+    def get_distance(self, icao):
+        current_airport = self.player.location
+        next_location = db.get_airport_info(icao)
+        distance = db.calculate_distance((current_airport['latitude_deg'],
+                                          current_airport["longitude_deg"]),
+                                         (next_location['latitude_deg'],
+                                          next_location['longitude_deg']))
+        return distance
 
-    def set_players(self, p1, p1_start, p2, p2_start):
-        self.player1 = Player(p1, p1_start)
-        self.player2 = Player(p2, p2_start)
-        self.players.append(self.player1)  # Pelaaja 1 on indeksi 0
-        self.players.append(self.player2)  # Pelaaja 2 on indeksi 1
+    def calculate_co2(self, icao):
+        distance = self.get_distance(icao)
+        co2_emitted = distance * 0.05
+        self.player.co2 = co2_emitted
 
-    def get_current_player_stats(self):
-        current_player = self.get_current_player()
-        return self.players[current_player].get_stats()
-
-    def fly_to(self, destination):
-        self.change_player_stats(self.players[self.current_player], destination)
-
-    def handle_bonus(self, dice):
-        self.multiplier = 2
-
-    # Vaihtaa pelaajien välillä
-    def change_current_player(self):
-        if self.current_player == 0:
-            self.current_player = 1
+    def fly_to(self, icao):
+        if self.check_if_enough_money(icao):
+            location = db.get_airport_info(icao)
+            self.player.update_location(location)
+            self.player.places_visited += 1
+            self.player.update_co2(location)
+            return True
         else:
-            self.current_player = 0
+            return False
 
-    def change_player_stats(self, player, next_location):
-        current_player = self.players[player]
+    def work(self, days):
+        money = 50 * days
+        self.player.update_money(money)
+        return money
 
-        distance = db.calculate_distance((current_player["current_airport"]["latitude_deg"],
-                                          current_player["current_airport"]["longitude_deg"]),
-                                         (next_location["latitude_deg"],
-                                          next_location["longitude_deg"]))
+    def check_if_enough_money(self, icao):
+        distance = self.get_distance(icao)
+        money_needed = distance * 25
 
-        points, fuel, co2 = self.calculate_info(distance, 1)
-        player.update_score(points)
-        player.update_fuel(fuel)
-        player.update_co2(co2)
-
-    def calculate_info(self, distance):
-        cruise_speed = 833
-        fuel_consumption = 889.571769
-        fuel_used = (distance / cruise_speed) * fuel_consumption
-
-        co2_per_l = 2.52
-        co2_emitted = fuel_used * co2_per_l
-
-        if self.multiplier == 2:
-            earned_points = distance * (0.1 + distance / 1000) * 2
-            self.multiplier = 1
+        if money_needed > self.player.money:
+            return True
         else:
-            earned_points = distance * (0.1 + distance / 1000) * 1
+            return False
 
-        return earned_points, fuel_used, co2_emitted
+    def is_over(self):
+        if self.player.check_is_over():
+            return True
+        else:
+            return False
