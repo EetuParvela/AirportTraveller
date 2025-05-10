@@ -22,13 +22,16 @@ def start_game():
 @app.route("/get_player_info", methods=['GET'])
 def get_player_info():
     name, location, money, co2, places_visited = game_instance.player.get_player_info()
+    days = game_instance.days
 
     return jsonify({
         "name": name,
         "location": location,
         "money": money,
         "co2": co2,
-        "places_visited": places_visited
+        "places_visited": places_visited,
+        "days": days
+
     }), 200
 
 
