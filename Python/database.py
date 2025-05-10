@@ -107,7 +107,6 @@ def get_all_airports():
 
             airports = []
             for row in airport_data:
-                weather = get_weather(row['latitude_deg'], row['longitude_deg'])
                 airports.append({
                     "icao": row['ident'],
                     "country_name": row['country_name'],
@@ -115,7 +114,6 @@ def get_all_airports():
                     "latitude_deg": row['latitude_deg'],
                     "longitude_deg": row['longitude_deg'],
                     "welcome_phrase": row['welcome_phrase'],
-                    "weather": weather
                 })
 
             return airports
