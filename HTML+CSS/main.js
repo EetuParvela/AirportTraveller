@@ -13,6 +13,20 @@ document.getElementById("playerSelectButton").addEventListener("click", async ()
   }
 });
 
+
+
+function playerSelect() {
+  const name = document.getElementById('uname1').value.trim();
+  if (name === '') {
+    alert('Please enter your name before starting the game.');
+    return;
+  }
+  else {
+    window.location.href='game_view.html'
+  }
+}
+
+
 function showInstructions() {
     document.getElementById('iPopup').style.display = 'flex';
   }
@@ -21,6 +35,4 @@ function showInstructions() {
     document.getElementById('iPopup').style.display = 'none';
   }
 
-  function playerSelect() {
-    window.location.href = 'playerselect.html';
-  }
+

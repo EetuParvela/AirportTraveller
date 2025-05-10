@@ -1,161 +1,81 @@
-html {
 
-    font-family: "Handlee", cursive;
-    font-weight: 400;
-    font-style: normal;
-}
 
 #map {
     justify-content: center;
-    height: 600px;
-    width: 1400px;
-    margin-top: 3.2%;
-    margin-left: 3.2%;
-    margin-bottom: 20%;
-    border-radius: 20px;
+    height: 1100px;
+    width: 1000px;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0;
     border: black;
 }
 
 body {
-    background-image: url("corkboard1.jpg");
-    background-size: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
 }
 
-.maplist {
-    display: flex;
+
+
+
+
+#sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #00ccff;
 }
 
 
-.postit {
-    width: 150px;
-    height: 300px;
-    padding: 10px;
-    margin: 20px;
-    float: left;
-    font-size: 16px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-    transform: rotate(-2deg);
-    transition: transform 0.2s;
-    border: 1px solid #ccc;
-
+.job-buttons {
+  margin-bottom: 10px;
 }
-
-.postit:hover {
-    transform: scale(1.05) rotate(0deg);
-}
-
-.info {
-    margin-top: 5%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-
-}
-
-.yellow h5 {
-    margin-bottom: 20px;
-    font-size: 20px;
-}
-
-.yellow {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff475;
-    width: 400px;
-    height: 420px;
-    margin-bottom: 30px;
-    overflow: hidden;
+.job-buttons button {
+  display: block;
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 10px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #00ccff;
 
 }
 
-.airportdata {
-    display: flex;
-    flex-direction: column;
-}
 
-.yellow button {
-    border-radius: 9px;
-    background: red;
-    color: white;
-    font-size: 13px;
-    padding: 15px;
-    padding-bottom: 30px;
-    width: 60px;
-    height: 30px;
-    margin-bottom: 9px;
+.airport-info {
+  margin-top: 10px;
+  background: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #00ccff;
+  height: 300px;
+
 
 }
 
-.pink {
-    position: absolute;
-    top: 10px;
-    background-color: #ffc0cb;
-    width: 600px;
-    height: 300px;
-    margin-top: 700px;
-    margin-left: 5%;
+
+.visited-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  background: white;
+  padding: 10px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #00ccff;
+}
+.visited-list h4 {
+  margin-top: 0;
 }
 
-.blue {
-    background-color: #add8e6;
-    width: 250px;
-    height: 400px;
-}
 
-.blue h5 {
-    margin-bottom: 20px;
-    font-size: 20px;
-}
 
-.blue ol {
-    padding-left: 10px;
-}
 
-.blue li {
-    margin-bottom: 20px;
-}
 
-.green {
-    background: #4CAF50;
-    width: 250px;
-    height: 250px;
-}
 
-.green h5 {
-    margin-bottom: 20px;
-    font-size: 20px;
-}
-
-.green ul {
-    padding-left: 9px;
-}
-
-.green li {
-    margin-bottom: 20px;
-}
-
-#dice {
-    width: 20%;
-    font-size: 6vw;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    margin-bottom: 10px;
-}
-
-#dice:hover {
-    transform: scale(1.1);
-}
-
-#resultMsg {
-
-    margin-top: 1px;
-    margin-bottom: 50px;
-    font-weight: bold;
-}
-.pink h3 {
-    margin: 5px 0;
-}
-
-.endTurnButton {
-
-}

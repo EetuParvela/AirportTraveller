@@ -13,8 +13,9 @@ html, body {
 }
 
 body {
-    background: linear-gradient(to bottom, #2A3663, #B59F78);
-    background-image: url("corkboard1.jpg");
+
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #00ccff;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -26,6 +27,8 @@ body {
     text-align: center;
     display: flex;
     width: 150px;
+    align-items: center;
+
 
 
 }
@@ -36,22 +39,10 @@ body {
 }
 
 .player {
-    margin-top: 200px;
-    margin-bottom: 250px;
-    width: 200px;
-    height: 300px;
-    padding: 10px;
-    font-size: 16px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-    transform: rotate(-2deg);
-    transition: transform 0.2s;
-    border: 1px solid #ccc;
-    background: coral;
+
 }
 
-.player:hover {
-    transform: scale(1.05) rotate(0deg);
-}
+
 
 .player p {
     font-size: 9rem;

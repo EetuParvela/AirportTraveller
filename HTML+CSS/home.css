@@ -9,7 +9,8 @@ html, body {
 }
 
 body {
-    background: linear-gradient(to bottom, #2A3663, #B59F78);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+
 }
 
 .props {
@@ -57,21 +58,31 @@ h1 {
 
 .start {
     display: flex;
+    flex-direction: column;
     text-align: center;
     justify-content: center;
     justify-items: center;
     margin-top: 20rem;
     padding: 0;
-    width: 80%;
-    margin-left: 20%;
+    width:33.3%;
+    margin-left: 40%;
+    margin-right: 20%;
 
+}
+.uname {
+    width: 200px;
+    color: #D8DBBD;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 70px;
 }
 
 .start button {
-    font-size: 3rem;
+    font-size: 1rem;
     padding: 20px;
-    padding-left: 5rem;
-    padding-right: 5rem;
+    padding-left: 20px;
+    padding-right: 20px;
     background: #2A3663;
     border-radius: 9px;
     font-family: "Bai Jamjuree";
@@ -109,7 +120,7 @@ h1 {
 .leaderboard li {
     font-size: 30px;
     margin-bottom: 20px;
-    color: #2A3663;
+    color: #00ccff;
     font-family: "Bai Jamjuree";
 }
 
@@ -117,6 +128,8 @@ footer h3 {
     margin-top: 16rem;
     text-align: center;
     font-family: "Bai Jamjuree";
+    color: #D8DBBD;
+
 }
 
 .popup {
