@@ -1,6 +1,5 @@
 import database as db
 
-
 class Player:
     def __init__(self, name):
         self.name = name

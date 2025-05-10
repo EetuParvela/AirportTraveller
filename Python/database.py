@@ -33,8 +33,8 @@ def get_db_cursor(conn):
 
 
 def calculate_distance(current, target_coords):
-    target_coords = (target_coords['latitude_deg'], target_coords['longitude_deg'])
-    current_coords = (current["latitude_deg"], current["longitude_deg"])
+    target_coords = (target_coords[0], target_coords[1])
+    current_coords = (current[0], current[1])
     distance = geodesic(current_coords, target_coords).kilometers
     return distance
 
@@ -107,7 +107,6 @@ def get_all_airports():
 
             airports = []
             for row in airport_data:
-                weather = get_weather(row['latitude_deg'], row['longitude_deg'])
                 airports.append({
                     "icao": row['ident'],
                     "country_name": row['country_name'],
@@ -115,7 +114,6 @@ def get_all_airports():
                     "latitude_deg": row['latitude_deg'],
                     "longitude_deg": row['longitude_deg'],
                     "welcome_phrase": row['welcome_phrase'],
-                    "weather": weather
                 })
 
             return airports

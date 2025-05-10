@@ -16,7 +16,7 @@ def start_game():
 
     game_instance.start_game(player_name)
 
-    return jsonify({}), 200
+    return jsonify({"message": "Name recieved and player created"}), 200
 
 
 @app.route("/get_player_info", methods=['GET'])
@@ -53,9 +53,9 @@ def fly_to():
 
 @app.route('/get_airports', methods=['GET'])
 def get_airports():
-    db.get_all_airports()
+    airports = db.get_all_airports()
 
-    return jsonify({"message": "Got all airports succesfully"}), 200
+    return jsonify(airports), 200
 
 
 @app.route("/work", methods=['GET'])

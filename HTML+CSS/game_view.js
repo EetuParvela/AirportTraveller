@@ -13,7 +13,6 @@ loadAirportMarkers(map);
 
 let selectedAirport = null;
 
-
 async function loadAirportMarkers(map) {
   fetch('http://127.0.0.1:3000/get_airports').
       then(res => res.json()).
@@ -24,7 +23,8 @@ async function loadAirportMarkers(map) {
               bindPopup(marker.airport_name).on('click', () => {
             selectedAirport = marker;
 
-            document.getElementById('yellow').innerHTML = `
+            document.getElementById('airportInfo').innerHTML = `
+                <strong>Airport Info:</strong>
                 <h5>${marker.welcome_phrase}</h5>
                 <h5>${marker.airport_name}</h5>
                 <p>ICAO: ${marker.icao}</p>
@@ -35,7 +35,7 @@ async function loadAirportMarkers(map) {
             document.getElementById('flyButton').
                 addEventListener('click', () => {
                   if (selectedAirport) {
-                    updateLocation(selectedAirport);
+                    handleFly(selectedAirport);
                   } else {
                     console.error('No airport selected.');
                   }
@@ -44,4 +44,20 @@ async function loadAirportMarkers(map) {
         }).
             catch(err => console.error('Fetch error:', err));
       });
+}
+
+function handleFly(icao_code) {
+  const icao = icao_code;
+
+  fetch('http://127.0.0.1:3000/fly_to', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({icao}),
+  }).then(response => response.json()).then(data => {
+    if (data.game_over) {
+
+    }
+  }).catch(error => {
+    console.error('Flight error:', error);
+  });
 }
