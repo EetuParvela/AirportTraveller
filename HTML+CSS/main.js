@@ -6,7 +6,7 @@ async function startGame() {
   try {
     const response = await fetch('http://127.0.0.1:3000/start_game', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json',},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({player_name: playerName}),
     });
 
@@ -29,7 +29,7 @@ function playerSelect() {
     alert('Please enter your name before starting the game.');
   } else {
     window.location.href = 'game_view.html';
-    return name
+    return name;
   }
 }
 
@@ -41,23 +41,23 @@ function closeInstructions() {
   document.getElementById('iPopup').style.display = 'none';
 }
 
-
 async function highscore() {
 
   try {
-    const response = await fetch('http://127.0.0.1:3000/get_highscore')
+    const response = await fetch('http://127.0.0.1:3000/get_highscore');
     const scores = await response.json();
-    console.log(scores)
-    const ol2 = document.querySelector('#rank')
+    console.log(scores);
+    const ol2 = document.querySelector('#rank');
     for (let i = 0; i < scores.length; i++) {
-      const li2 = document.createElement('li')
-      console.log(i)
+      const li2 = document.createElement('li');
+      console.log(i);
       li2.innerHTML = `${scores[i]['player']}, ${scores[i]['score']}`;
-      ol2.appendChild(li2)
+      ol2.appendChild(li2);
     }
 
   } catch (error) {
     console.error('Virhe hakiessa highscores-tietoja:', error);
   }
 }
+
 window.onload = highscore;

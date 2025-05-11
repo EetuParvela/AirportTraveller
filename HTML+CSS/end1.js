@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const playerName = data.name;
         const money = Math.round(data.money);
         const co2 = Math.round(data.co2);
+        const score = Math.round(data.score)
         const places = data.places_visited;
         const days = data.days;
 
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameoverBox.innerHTML = `
         <h1>Game Over</h1>
         <p>Player: ${playerName}</p>
+        <p>Score: ${score}</p>
         <p>Money left: ${money}€</p>
         <p>Days: ${days}</p>
         <p>CO₂: ${co2} kg</p>
@@ -24,17 +26,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 });
 
-document.getElementById('playAgainButton').addEventListener('click', resetStats);
+document.getElementById('playAgainButton').
+    addEventListener('click', resetStats);
 
 function resetStats() {
-  fetch('http://127.0.0.1:3000/reset_player_stats')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.message);
-      window.location.href = 'main.html';
-    })
-    .catch(error => {
-      console.error('Error resetting player stats:', error);
-    });
+  fetch('http://127.0.0.1:3000/reset_player_stats').
+      then(response => response.json()).
+      then(data => {
+        console.log(data.message);
+        window.location.href = 'main.html';
+      }).
+      catch(error => {
+        console.error('Error resetting player stats:', error);
+      });
 }
 
+window.onload(fetch('http://127.0.0.1:3000/update_database_highscore').
+      then(response => response.json()).
+      then(data => {
+        console.log(data.message);
+      }).
+      catch(error => {
+        console.error('Error resetting player stats:', error);
+      }))

@@ -3,8 +3,8 @@ import requests
 from contextlib import contextmanager
 import mysql.connector
 from geopy.distance import geodesic
-
-
+from api import game_instance
+import game
 
 @contextmanager
 def get_db_connection():
@@ -12,8 +12,8 @@ def get_db_connection():
         host='127.0.0.1',
         port=3306,
         database='flight_game',
-        user='lauri1',
-        password='salis1',
+        user='eetu',
+        password='mdb21',
         charset="utf8mb4",
         collation="utf8mb4_general_ci",
         autocommit=True
@@ -57,10 +57,8 @@ def get_weather(lat, lon):
 
 # Hankkii yhden lentokentän tiedot tietokannasta
 def get_airport_info(icao):
-
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
-
             cursor.execute(
                 """
                 SELECT c.name AS country_name,
@@ -86,13 +84,10 @@ def get_airport_info(icao):
         }
 
 
-
 # Palauttaa kaikki lentokentät tietokannasta
 def get_all_airports():
-
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
-
             cursor.execute("""
                            SELECT a.ident,
                                   a.name AS airport_name,
@@ -101,8 +96,8 @@ def get_all_airports():
                                   c.name AS country_name,
                                   cw.welcome_phrase
                            FROM eu_airports a
-                            JOIN country c ON a.iso_country = c.iso_country
-                            LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
+                                    JOIN country c ON a.iso_country = c.iso_country
+                                    LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
                            """)
             airport_data = cursor.fetchall()
 
@@ -122,10 +117,8 @@ def get_all_airports():
 
 # Palauttaa 5 lähintä lentokenttää pelaajaan
 def get_closest_airports(current_icao):
-
     with get_db_connection() as conn:
         with get_db_cursor(conn) as cursor:
-
             # Hakee nykyisen lentokentän tiedot
             cursor.execute("SELECT latitude_deg, longitude_deg FROM eu_airports WHERE ident = %s", (current_icao,))
             current = cursor.fetchall()
@@ -140,9 +133,9 @@ def get_closest_airports(current_icao):
                                   a.longitude_deg,
                                   c.name AS country_name,
                                   cw.welcome_phrase
-                            FROM eu_airports a
-                            JOIN country c ON a.iso_country = c.iso_country
-                            LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
+                           FROM eu_airports a
+                                    JOIN country c ON a.iso_country = c.iso_country
+                                    LEFT JOIN country_welcome cw ON a.iso_country = cw.iso_country
                            WHERE a.ident != %s
                            """, (current_icao,))
             airports = cursor.fetchall()
@@ -166,5 +159,4 @@ def get_highscore():
             return [{"player": row["player"], "score": row["points"]} for row in results]
 
 
-ia = get_highscore()
-print(ia)
+

@@ -3,7 +3,6 @@ from flask_cors import CORS
 import database as db
 from Python.game import GameState
 
-
 app = Flask(__name__)
 CORS(app)
 
@@ -14,6 +13,7 @@ def reset_stats():
     game_instance.player.reset_stats()
 
     return jsonify({"message": "Player stats reset"})
+
 
 @app.route('/start_game', methods=['POST'])
 def start_game():
@@ -27,7 +27,7 @@ def start_game():
 
 @app.route("/get_player_info", methods=['GET'])
 def get_player_info():
-    name, location, money, co2, places_visited = game_instance.player.get_player_stats()
+    name, location, money, co2, score, places_visited = game_instance.player.get_player_stats()
     days = game_instance.days
 
     return jsonify({
@@ -35,6 +35,7 @@ def get_player_info():
         "location": location,
         "money": money,
         "co2": co2,
+        "score": score,
         "places_visited": places_visited,
         "days": days
     }), 200
@@ -77,6 +78,8 @@ def work():
     print(money_gained)
 
     return jsonify({"message": f"Work completed! Gained ${money_gained}€"}), 200
+
+
 @app.route('/get_highscore', methods=['GET'])
 def get_highscore_route():
     scoreboard = db.get_highscore()
@@ -84,9 +87,19 @@ def get_highscore_route():
 
     return jsonify(scoreboard), 200
 
+@app.route("/update_database_highscore", methods=["GET"])
+def update_highscore():
+    with db.get_db_connection() as conn:
+        with db.get_db_cursor(conn) as cursor:
+            player_name = game_instance.player.name
+            points = game_instance.player.score
+
+            query = "INSERT INTO highscore (player, points) VALUES (%s, %s);"
+            cursor.execute(query, (player_name, points))
+        conn.commit()
+
+    return jsonify(), 200
+
 
 if __name__ == "__main__":
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
-
-
-

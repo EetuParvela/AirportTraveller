@@ -1,7 +1,7 @@
-  const bounds = L.latLngBounds(
-    [90, -180], 
-    [-90, 180]  
-  );
+const bounds = L.latLngBounds(
+    [90, -180],
+    [-90, 180],
+);
 
 const map = L.map('map', {
   minZoom: 3, maxZoom: 10, maxBounds: bounds, maxBoundsViscosity: 1.0,
@@ -15,7 +15,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 loadAirportMarkers(map);
 
 let selectedAirport = null;
-
 
 async function loadAirportMarkers(map) {
   fetch('http://127.0.0.1:3000/get_airports').
@@ -38,7 +37,13 @@ async function loadAirportMarkers(map) {
             document.getElementById('flyButton').
                 addEventListener('click', () => {
                   if (selectedAirport) {
-                    updateLocation(selectedAirport);
+                    handleFly(selectedAirport);
+
+                    const ul = document.getElementById('visitedList');
+                    const li = document.createElement('li');
+                    li.textContent = selectedAirport.airport_name;
+                    ul.appendChild(li);
+
                   } else {
                     console.error('No airport selected.');
                   }
@@ -48,3 +53,38 @@ async function loadAirportMarkers(map) {
             catch(err => console.error('Fetch error:', err));
       });
 }
+
+function handleFly(icao_code) {
+  const icao = icao_code;
+
+  fetch('http://127.0.0.1:3000/fly_to', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({icao}),
+  }).then(response => response.json()).then(data => {
+    if (data.game_over) {
+      window.location.href = 'end1.html';
+    }
+  }).catch(error => {
+    console.error('Flight error:', error);
+  });
+}
+
+function handleWork(days) {
+  fetch('http://127.0.0.1:3000/work', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({days}),
+  }).then(response => response.json()).then(data => {
+    console.log(data.message);
+    // You can also update the UI with new money here
+  }).catch(error => {
+    console.error('Work error:', error);
+  });
+}
+
+document.getElementById('work1').addEventListener('click', () => handleWork(1));
+document.getElementById('work2').addEventListener('click', () => handleWork(2));
+document.getElementById('work3').addEventListener('click', () => handleWork(3));

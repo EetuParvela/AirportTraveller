@@ -6,6 +6,7 @@ class Player:
         self.location = None
         self.money = 500
         self.co2 = 0
+        self.score = 0
         self.places_visited = 0
 
     def update_location(self, location):
@@ -17,13 +18,17 @@ class Player:
     def update_co2(self, amount):
         self.co2 += amount
 
+    def update_score(self, points):
+        self.score += points
+
     def get_player_stats(self):
         name = self.name
         location = self.location
         money = self.money
         co2 = self.co2
+        score = self.score
         places_visited = self.places_visited
-        return name, location, money, co2, places_visited
+        return name, location, money, co2, score, places_visited
 
     def reset_stats(self):
         self.name = "Player"
@@ -61,10 +66,16 @@ class GameState:
         co2_emitted = distance * 0.050
         self.player.update_co2(co2_emitted)
 
+    def calculate_score(self, icao):
+        distance = self.get_distance(icao)
+        score_gained = distance
+        self.player.update_score(score_gained)
+
     def fly_to(self, icao):
         if self.check_if_enough_money(icao):
             location = db.get_airport_info(icao)
             self.calculate_co2(icao)
+            self.calculate_score(icao)
             self.player.update_location(location)
             self.player.places_visited += 1
             self.days += 1
