@@ -110,6 +110,7 @@ function current_player_info() {
         const score = Math.round(data.score);
         const places = data.places_visited;
         const days = data.days;
+        const current = data.location.airport_name;
 
         const playerData = document.getElementById('pdata');
 
@@ -121,6 +122,7 @@ function current_player_info() {
         <p>Days: ${days}</p>
         <p>CO₂: ${co2} kg</p>
         <p>Places visited: ${places}</p>
+        <p>Location: ${current}</p>
       `;
       }).
       catch(error => {

@@ -29,6 +29,7 @@ def start_game():
 def get_player_info():
     name, location, money, co2, score, places_visited = game_instance.player.get_player_stats()
     days = game_instance.days
+    print(location)
 
     return jsonify({
         "name": name,
