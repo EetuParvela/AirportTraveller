@@ -1,4 +1,4 @@
-document.addEventListener('click', () => {
+
   fetch('http://127.0.0.1:3000/get_player_info').
       then(response => response.json()).
       then(data => {
@@ -24,7 +24,7 @@ document.addEventListener('click', () => {
       catch(error => {
         console.error('Error loading player info:', error);
       });
-});
+
 
 document.getElementById('playAgainButton').
     addEventListener('click', resetStats);
@@ -41,14 +41,7 @@ function resetStats() {
       });
 }
 
-window.onload(fetch('http://127.0.0.1:3000/update_database_highscore').
-      then(response => response.json()).
-      then(data => {
-        console.log(data.message);
-      }).
-      catch(error => {
-        console.error('Error resetting player stats:', error);
-      }))
+
 async function highscore() {
 
   try {
@@ -67,4 +60,14 @@ async function highscore() {
     console.error('Virhe hakiessa highscores-tietoja:', error);
   }
 }
-window.onload = highscore;
+window.onload = () => {fetch('http://127.0.0.1:3000/update_database_highscore')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.message);
+    })
+    .catch(error => {
+      console.error('Error updating highscore:', error);
+    });
+    highscore();
+};
+
