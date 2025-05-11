@@ -1,11 +1,10 @@
 import database as db
 
-
 class Player:
     def __init__(self, name):
         self.name = name
         self.location = None
-        self.money = 10000
+        self.money = 500
         self.co2 = 0
         self.places_visited = 0
 
@@ -13,7 +12,7 @@ class Player:
         self.location = location
 
     def update_money(self, money):
-        self.money = money
+        self.money += money
 
     def update_co2(self, amount):
         self.co2 += amount
@@ -26,8 +25,15 @@ class Player:
         places_visited = self.places_visited
         return name, location, money, co2, places_visited
 
+    def reset_stats(self):
+        self.name = "Player"
+        self.location = None
+        self.money = 500
+        self.co2 = 0
+        self.places_visited = 0
+
     def check_is_over(self):
-        if self.places_visited == 15:
+        if self.places_visited == 2:
             return True
         return False
 
@@ -58,16 +64,17 @@ class GameState:
     def fly_to(self, icao):
         if self.check_if_enough_money(icao):
             location = db.get_airport_info(icao)
+            self.calculate_co2(icao)
             self.player.update_location(location)
             self.player.places_visited += 1
-            self.calculate_co2(icao)
-            print(self.player.get_player_stats())
+            self.days += 1
             return True
         else:
             return False
 
     def work(self, days):
         money = 50 * days
+        self.days += days
         self.player.update_money(money)
         return money
 
@@ -76,7 +83,7 @@ class GameState:
         money_needed = distance * 0.5
 
         if money_needed < self.player.money:
-            self.player.update_money(money_needed)
+            self.player.update_money(-money_needed)
             return True
         else:
             return False

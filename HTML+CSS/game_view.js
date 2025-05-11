@@ -36,6 +36,12 @@ async function loadAirportMarkers(map) {
                 addEventListener('click', () => {
                   if (selectedAirport) {
                     handleFly(selectedAirport);
+
+                    const ul = document.getElementById('visitedList');
+                    const li = document.createElement('li');
+                    li.textContent = selectedAirport.airport_name;
+                    ul.appendChild(li);
+
                   } else {
                     console.error('No airport selected.');
                   }
@@ -55,9 +61,28 @@ function handleFly(icao_code) {
     body: JSON.stringify({icao}),
   }).then(response => response.json()).then(data => {
     if (data.game_over) {
-
+      window.location.href = 'end1.html';
     }
   }).catch(error => {
     console.error('Flight error:', error);
   });
 }
+
+function handleWork(days) {
+  fetch('http://127.0.0.1:3000/work', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({days}),
+  }).then(response => response.json()).then(data => {
+    console.log(data.message);
+    // You can also update the UI with new money here
+  }).catch(error => {
+    console.error('Work error:', error);
+  });
+}
+
+document.getElementById('work1').addEventListener('click', () => handleWork(1));
+document.getElementById('work2').addEventListener('click', () => handleWork(2));
+document.getElementById('work3').addEventListener('click', () => handleWork(3));

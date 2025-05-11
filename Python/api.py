@@ -8,6 +8,11 @@ CORS(app)
 
 game_instance = GameState()
 
+@app.route("/reset_player_stats", methods=["GET"])
+def reset_stats():
+    game_instance.player.reset_stats()
+
+    return jsonify({"message": "Player stats reset"})
 
 @app.route('/start_game', methods=['POST'])
 def start_game():
@@ -21,7 +26,7 @@ def start_game():
 
 @app.route("/get_player_info", methods=['GET'])
 def get_player_info():
-    name, location, money, co2, places_visited = game_instance.player.get_player_info()
+    name, location, money, co2, places_visited = game_instance.player.get_player_stats()
     days = game_instance.days
 
     return jsonify({
@@ -31,7 +36,6 @@ def get_player_info():
         "co2": co2,
         "places_visited": places_visited,
         "days": days
-
     }), 200
 
 
@@ -63,12 +67,13 @@ def get_airports():
     return jsonify(airports), 200
 
 
-@app.route("/work", methods=['GET'])
+@app.route("/work", methods=['POST'])
 def work():
     data = request.get_json()
     days = data['days']
 
     money_gained = game_instance.work(days)
+    print(money_gained)
 
     return jsonify({"message": f"Work completed! Gained ${money_gained}€"}), 200
 
