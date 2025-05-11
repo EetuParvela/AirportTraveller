@@ -1,7 +1,4 @@
-const bounds = L.latLngBounds(
-    [90, -180],
-    [-90, 180],
-);
+const bounds = L.latLngBounds([90, -180], [-90, 180]);
 
 const map = L.map('map', {
   minZoom: 3, maxZoom: 10, maxBounds: bounds, maxBoundsViscosity: 1.0,
@@ -27,6 +24,7 @@ async function loadAirportMarkers(map) {
             selectedAirport = marker;
 
             document.getElementById('airportInfo').innerHTML = `
+                <strong>Airport Info:</strong>
                 <h5>${marker.welcome_phrase}</h5>
                 <h5>${marker.airport_name}</h5>
                 <p>ICAO: ${marker.icao}</p>
@@ -35,15 +33,9 @@ async function loadAirportMarkers(map) {
               `;
 
             document.getElementById('flyButton').
-                addEventListener('click', () => {
+                addEventListener('click', async () => {
                   if (selectedAirport) {
-                    handleFly(selectedAirport);
-
-                    const ul = document.getElementById('visitedList');
-                    const li = document.createElement('li');
-                    li.textContent = selectedAirport.airport_name;
-                    ul.appendChild(li);
-
+                    await handleFly(selectedAirport);
                   } else {
                     console.error('No airport selected.');
                   }
@@ -54,29 +46,42 @@ async function loadAirportMarkers(map) {
       });
 }
 
-function handleFly(icao_code) {
+async function handleFly(icao_code) {
   const icao = icao_code;
 
-  fetch('http://127.0.0.1:3000/fly_to', {
+  await fetch('http://127.0.0.1:3000/fly_to', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({icao}),
-  }).then(response => response.json()).then(data => {
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.can_fly) {
+      current_player_info();
+
+      const ul = document.getElementById('visitedList');
+      const li = document.createElement('li');
+      li.textContent = selectedAirport.airport_name;
+      ul.appendChild(li);
+    } else {
+      alert(data.message || 'You cannot fly to this location.');
+    }
+
     if (data.game_over) {
       window.location.href = 'end1.html';
     }
-  }).catch(error => {
+  })
+  .catch(error => {
     console.error('Flight error:', error);
   });
 }
 
+
 function handleWork(days) {
   fetch('http://127.0.0.1:3000/work', {
-    method: 'POST',
-    headers: {
+    method: 'POST', headers: {
       'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({days}),
+    }, body: JSON.stringify({days}),
   }).then(response => response.json()).then(data => {
     console.log(data.message);
     // You can also update the UI with new money here
@@ -85,59 +90,51 @@ function handleWork(days) {
   });
 }
 
+function current_player_info() {
+  fetch('http://127.0.0.1:3000/get_player_info').
+      then(response => response.json()).
+      then(data => {
+        const playerName = data.name;
+        const money = Math.round(data.money);
+        const co2 = Math.round(data.co2);
+        const score = Math.round(data.score);
+        const places = data.places_visited;
+        const days = data.days;
+
+        const playerData = document.getElementById('pdata');
+
+        playerData.innerHTML = `
+        <h1>Airport Info:</h1>
+        <p>Player: ${playerName}</p>
+        <p>Score: ${score}</p>
+        <p>Money left: ${money}€</p>
+        <p>Days: ${days}</p>
+        <p>CO₂: ${co2} kg</p>
+        <p>Places visited: ${places}</p>
+      `;
+      }).
+      catch(error => {
+        console.error('Error loading player info:', error);
+      });
+}
+
 document.getElementById('work1').addEventListener('click', () => handleWork(1));
 document.getElementById('work2').addEventListener('click', () => handleWork(2));
 document.getElementById('work3').addEventListener('click', () => handleWork(3));
 
-async function highlightPlayerMarkers(markerData) {
-  try {
-    const response = await fetch('http://127.0.0.1:3000/get_player_info');
-    const playerInfo = await response.json();
-    const currentPlayer = playerInfo.name;
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('http://127.0.0.1:3000/get_player_info').
+      then(response => response.json()).
+      then(data => {
+        const playerName = data.name;
+        const money = data.money;
+        const co2 = Math.round(data.co2);
+        const places = data.places_visited;
+        const days = data.days;
 
-    const redIcon = L.icon({
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-red.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
+        const gameoverBox = document.querySelector('.pdata');
 
-    const blueIcon = L.icon({
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      shadowSize: [41, 41]
-    });
-
-
-    markerData.forEach(data => {
-      const icon = data.player === currentPlayer ? redIcon : blueIcon;
-      L.marker([data.lat, data.lng], { icon })
-        .addTo(map)
-        .bindPopup(`Player: ${data.player}`);
-    });
-
-  } catch (error) {
-    console.error('Virhe hakiessa pelaajan tietoja:', error);
-  }
-}
- document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://127.0.0.1:3000/get_player_info")
-    .then(response => response.json())
-    .then(data => {
-      const playerName = data.name;
-      const money = data.money;
-      const co2 = Math.round(data.co2);
-      const places = data.places_visited;
-      const days = data.days;
-
-      const gameoverBox = document.querySelector(".pdata");
-
-      gameoverBox.innerHTML = `
+        gameoverBox.innerHTML = `
         <h1>Stats</h1>
         <p>Player: ${playerName}</p>
         <p>Money: ${money}</p>
@@ -145,8 +142,8 @@ async function highlightPlayerMarkers(markerData) {
         <p>CO₂: ${co2} g</p>
         <p>Places visited: ${places}</p>
       `;
-    })
-    .catch(error => {
-      console.error("Error loading player info:", error);
-    });
+      }).
+      catch(error => {
+        console.error('Error loading player info:', error);
+      });
 });

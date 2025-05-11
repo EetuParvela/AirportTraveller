@@ -50,15 +50,18 @@ def fly_to():
         if game_instance.is_over():
             return jsonify({
                 "message": "Flight successful",
+                "can_fly": True,
                 "game_over": True
             }), 200
         else:
             return jsonify({
-                "message": "Flight succesfull",
+                "message": "Flight succesful",
+                "can_fly": True,
                 "game_over": False
             }), 200
     else:
         return jsonify({"message": "Flight failed. Not enough money",
+                        "can_fly": False,
                         "game_over": False}), 200
 
 

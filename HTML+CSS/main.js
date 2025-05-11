@@ -60,4 +60,4 @@ async function highscore() {
   }
 }
 
-window.onload = highscore;
+window.onload = highscore();

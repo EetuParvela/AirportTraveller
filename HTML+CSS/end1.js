@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('click', () => {
   fetch('http://127.0.0.1:3000/get_player_info').
       then(response => response.json()).
       then(data => {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const places = data.places_visited;
         const days = data.days;
 
-        const gameoverBox = document.querySelector('.gameover-box');
+        const gameoverBox = document.getElementById('gameover-box');
 
         gameoverBox.innerHTML = `
         <h1>Game Over</h1>
