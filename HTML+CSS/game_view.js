@@ -88,3 +88,65 @@ function handleWork(days) {
 document.getElementById('work1').addEventListener('click', () => handleWork(1));
 document.getElementById('work2').addEventListener('click', () => handleWork(2));
 document.getElementById('work3').addEventListener('click', () => handleWork(3));
+
+async function highlightPlayerMarkers(markerData) {
+  try {
+    const response = await fetch('http://127.0.0.1:3000/get_player_info');
+    const playerInfo = await response.json();
+    const currentPlayer = playerInfo.name;
+
+    const redIcon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-red.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
+    const blueIcon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
+
+    markerData.forEach(data => {
+      const icon = data.player === currentPlayer ? redIcon : blueIcon;
+      L.marker([data.lat, data.lng], { icon })
+        .addTo(map)
+        .bindPopup(`Player: ${data.player}`);
+    });
+
+  } catch (error) {
+    console.error('Virhe hakiessa pelaajan tietoja:', error);
+  }
+}
+ document.addEventListener("DOMContentLoaded", () => {
+  fetch("http://127.0.0.1:3000/get_player_info")
+    .then(response => response.json())
+    .then(data => {
+      const playerName = data.name;
+      const money = data.money;
+      const co2 = Math.round(data.co2);
+      const places = data.places_visited;
+      const days = data.days;
+
+      const gameoverBox = document.querySelector(".pdata");
+
+      gameoverBox.innerHTML = `
+        <h1>Stats</h1>
+        <p>Player: ${playerName}</p>
+        <p>Money: ${money}</p>
+        <p>Time: ${days} days</p>
+        <p>CO₂: ${co2} g</p>
+        <p>Places visited: ${places}</p>
+      `;
+    })
+    .catch(error => {
+      console.error("Error loading player info:", error);
+    });
+});
