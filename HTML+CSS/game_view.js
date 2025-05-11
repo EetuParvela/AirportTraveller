@@ -14,36 +14,45 @@ loadAirportMarkers(map);
 let selectedAirport = null;
 
 async function loadAirportMarkers(map) {
-  fetch('http://127.0.0.1:3000/get_airports').
-      then(res => res.json()).
-      then(data => {
-        data.forEach(marker => {
-          L.marker([marker['latitude_deg'], marker['longitude_deg']]).
-              addTo(map).
-              bindPopup(marker.airport_name).on('click', () => {
-            selectedAirport = marker;
+  try {
+    const res = await fetch('http://127.0.0.1:3000/get_airports');
+    const data = await res.json();
 
-            document.getElementById('airportInfo').innerHTML = `
-                <strong>Airport Info:</strong>
-                <h5>${marker.welcome_phrase}</h5>
-                <h5>${marker.airport_name}</h5>
-                <p>ICAO: ${marker.icao}</p>
-                <p>Country: ${marker.country_name}</p>
-                <button type="button" id="flyButton">Fly</button>
-              `;
+    data.forEach(marker => {
+      L.marker([marker['latitude_deg'], marker['longitude_deg']])
+        .addTo(map)
+        .bindPopup(marker.airport_name)
+        .on('click',async () => {
+          selectedAirport = marker;
 
-            document.getElementById('flyButton').
-                addEventListener('click', async () => {
-                  if (selectedAirport) {
-                    await handleFly(selectedAirport);
-                  } else {
-                    console.error('No airport selected.');
-                  }
-                });
+          // saadan etäisyys ja lasketaan hintaa
+          const costRes = await fetch('http://127.0.0.1:3000/get_distance?icao=' + marker.icao);
+          const costData = await costRes.json();
+          const distance = costData.distance;
+          const flightCost = Math.round(distance * 0.5);
+
+          document.getElementById('airportInfo').innerHTML = `
+              <strong>Airport Info:</strong>
+              <h5>${marker.welcome_phrase}</h5>
+              <h5>${marker.airport_name}</h5>
+              <p>ICAO: ${marker.icao}</p>
+              <p>Country: ${marker.country_name}</p>
+              <p><strong>Flight cost:</strong> ${flightCost}€</p>
+              <button type="button" id="flyButton">Fly</button>
+            `;
+
+          document.getElementById('flyButton').addEventListener('click', async () => {
+            if (selectedAirport) {
+              await handleFly(selectedAirport);
+            } else {
+              console.error('No airport selected.');
+            }
           });
-        }).
-            catch(err => console.error('Fetch error:', err));
-      });
+        });
+    });
+  } catch (err) {
+    console.error('Fetch error:', err);
+  }
 }
 
 async function handleFly(icao_code) {
@@ -84,6 +93,7 @@ function handleWork(days) {
     }, body: JSON.stringify({days}),
   }).then(response => response.json()).then(data => {
     console.log(data.message);
+    current_player_info();
     // You can also update the UI with new money here
   }).catch(error => {
     console.error('Work error:', error);
