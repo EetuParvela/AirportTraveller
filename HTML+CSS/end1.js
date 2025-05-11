@@ -1,11 +1,11 @@
-
+document.addEventListener('DOMContentLoaded', () => {
   fetch('http://127.0.0.1:3000/get_player_info').
       then(response => response.json()).
       then(data => {
         const playerName = data.name;
         const money = Math.round(data.money);
         const co2 = Math.round(data.co2);
-        const score = Math.round(data.score)
+        const score = Math.round(data.score);
         const places = data.places_visited;
         const days = data.days;
 
@@ -24,8 +24,7 @@
       catch(error => {
         console.error('Error loading player info:', error);
       });
-
-
+});
 document.getElementById('playAgainButton').
     addEventListener('click', resetStats);
 
@@ -41,33 +40,32 @@ function resetStats() {
       });
 }
 
+window.onload = update_database();
+async function update_database() {
+  await fetch('http://127.0.0.1:3000/update_database_highscore').
+      then(response => response.json()).
+      then(data => {
+        console.log(data.message);
+      }).
+      catch(error => {
+        console.error('Error resetting player stats:', error);
+      });
+}
 
+window.onload = highscore();
 async function highscore() {
-
   try {
-    const response = await fetch('http://127.0.0.1:3000/get_highscore')
+    const response = await fetch('http://127.0.0.1:3000/get_highscore');
     const scores = await response.json();
-    console.log(scores)
-    const ol2 = document.querySelector('#rank')
+    console.log(scores);
+    const ol2 = document.getElementById('rank');
     for (let i = 0; i < scores.length; i++) {
-      const li2 = document.createElement('li')
-      console.log(i)
+      const li2 = document.createElement('li');
+      console.log(i);
       li2.innerHTML = `Name: ${scores[i]['player']}, Points: ${scores[i]['score']}`;
-      ol2.appendChild(li2)
+      ol2.appendChild(li2);
     }
-
   } catch (error) {
     console.error('Virhe hakiessa highscores-tietoja:', error);
   }
 }
-window.onload = () => {fetch('http://127.0.0.1:3000/update_database_highscore')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.message);
-    })
-    .catch(error => {
-      console.error('Error updating highscore:', error);
-    });
-    highscore();
-};
-

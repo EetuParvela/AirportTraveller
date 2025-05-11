@@ -8,6 +8,7 @@ CORS(app)
 
 game_instance = GameState()
 
+
 @app.route("/reset_player_stats", methods=["GET"])
 def reset_stats():
     game_instance.player.reset_stats()
@@ -79,7 +80,6 @@ def work():
     days = data['days']
 
     money_gained = game_instance.work(days)
-    print(money_gained)
 
     return jsonify({"message": f"Work completed! Gained ${money_gained}€"}), 200
 
@@ -87,23 +87,17 @@ def work():
 @app.route('/get_highscore', methods=['GET'])
 def get_highscore_route():
     scoreboard = db.get_highscore()
-    print(scoreboard)
 
     return jsonify(scoreboard), 200
 
+
 @app.route("/update_database_highscore", methods=["GET"])
 def update_highscore():
-    with db.get_db_connection() as conn:
-        with db.get_db_cursor(conn) as cursor:
-            player_name = game_instance.player.name
-            points = game_instance.player.score
+    player_name = game_instance.player.name
+    points = game_instance.player.score
+    result = db.update_database(player_name, points)
 
-            query = "INSERT INTO highscore (player, points) VALUES (%s, %s);"
-            cursor.execute(query, (player_name, points))
-        conn.commit()
-
-    return jsonify(), 200
-
+    return jsonify(result), 200
 @app.route('/get_distance', methods=['GET']) # lähetetään etäisyys lennon hinnan laskettamiseksi
 def get_distance():
     icao = request.args.get('icao')

@@ -42,16 +42,15 @@ function closeInstructions() {
 }
 
 async function highscore() {
-
   try {
     const response = await fetch('http://127.0.0.1:3000/get_highscore');
     const scores = await response.json();
     console.log(scores);
-    const ol2 = document.querySelector('#rank');
+    const ol2 = document.getElementById('rank');
     for (let i = 0; i < scores.length; i++) {
       const li2 = document.createElement('li');
       console.log(i);
-      li2.innerHTML = `Name: ${scores[i]['player']}, Points: ${scores[i]['score']}`;
+      li2.innerHTML = `Name: ${scores[i]['player']} Points: ${scores[i]['score']}`;
       ol2.appendChild(li2);
     }
 

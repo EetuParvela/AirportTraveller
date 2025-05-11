@@ -12,8 +12,8 @@ def get_db_connection():
         host='127.0.0.1',
         port=3306,
         database='flight_game',
-        user='lauri1',
-        password='salis1',
+        user='eetu',
+        password='mdb21',
         charset="utf8mb4",
         collation="utf8mb4_general_ci",
         autocommit=True
@@ -158,5 +158,9 @@ def get_highscore():
             results = cursor.fetchall()
             return [{"player": row["player"], "score": row["points"]} for row in results]
 
-
-
+def update_database(player, points):
+    with get_db_connection() as conn:
+        with get_db_cursor(conn) as cursor:
+            query = "INSERT INTO highscore (player, points) VALUES (%s, %s);"
+            cursor.execute(query, (player, points))
+        conn.commit()

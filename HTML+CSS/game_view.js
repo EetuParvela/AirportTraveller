@@ -19,19 +19,20 @@ async function loadAirportMarkers(map) {
     const data = await res.json();
 
     data.forEach(marker => {
-      L.marker([marker['latitude_deg'], marker['longitude_deg']])
-        .addTo(map)
-        .bindPopup(marker.airport_name)
-        .on('click',async () => {
-          selectedAirport = marker;
+      L.marker([marker['latitude_deg'], marker['longitude_deg']]).
+          addTo(map).
+          bindPopup(marker.airport_name).
+          on('click', async () => {
+            selectedAirport = marker;
 
-          // saadan etäisyys ja lasketaan hintaa
-          const costRes = await fetch('http://127.0.0.1:3000/get_distance?icao=' + marker.icao);
-          const costData = await costRes.json();
-          const distance = costData.distance;
-          const flightCost = Math.round(distance * 0.5);
+            // saadan etäisyys ja lasketaan hintaa
+            const costRes = await fetch(
+                'http://127.0.0.1:3000/get_distance?icao=' + marker.icao);
+            const costData = await costRes.json();
+            const distance = costData.distance;
+            const flightCost = Math.round(distance * 0.5);
 
-          document.getElementById('airportInfo').innerHTML = `
+            document.getElementById('airportInfo').innerHTML = `
               <strong>Airport Info:</strong>
               <h5>${marker.welcome_phrase}</h5>
               <h5>${marker.airport_name}</h5>
@@ -41,14 +42,15 @@ async function loadAirportMarkers(map) {
               <button type="button" id="flyButton">Fly</button>
             `;
 
-          document.getElementById('flyButton').addEventListener('click', async () => {
-            if (selectedAirport) {
-              await handleFly(selectedAirport);
-            } else {
-              console.error('No airport selected.');
-            }
+            document.getElementById('flyButton').
+                addEventListener('click', async () => {
+                  if (selectedAirport) {
+                    await handleFly(selectedAirport);
+                  } else {
+                    console.error('No airport selected.');
+                  }
+                });
           });
-        });
     });
   } catch (err) {
     console.error('Fetch error:', err);
@@ -62,9 +64,7 @@ async function handleFly(icao_code) {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({icao}),
-  })
-  .then(response => response.json())
-  .then(data => {
+  }).then(response => response.json()).then(data => {
     if (data.can_fly) {
       current_player_info();
 
@@ -79,12 +79,10 @@ async function handleFly(icao_code) {
     if (data.game_over) {
       window.location.href = 'end1.html';
     }
-  })
-  .catch(error => {
+  }).catch(error => {
     console.error('Flight error:', error);
   });
 }
-
 
 function handleWork(days) {
   fetch('http://127.0.0.1:3000/work', {
@@ -94,7 +92,6 @@ function handleWork(days) {
   }).then(response => response.json()).then(data => {
     console.log(data.message);
     current_player_info();
-    // You can also update the UI with new money here
   }).catch(error => {
     console.error('Work error:', error);
   });
@@ -105,9 +102,9 @@ function current_player_info() {
       then(response => response.json()).
       then(data => {
         const playerName = data.name;
+        const score = Math.round(data.score);
         const money = Math.round(data.money);
         const co2 = Math.round(data.co2);
-        const score = Math.round(data.score);
         const places = data.places_visited;
         const days = data.days;
         const current = data.location.airport_name;
@@ -115,7 +112,7 @@ function current_player_info() {
         const playerData = document.getElementById('pdata');
 
         playerData.innerHTML = `
-        <h1>Airport Info:</h1>
+        <h1>Player Stats:</h1>
         <p>Player: ${playerName}</p>
         <p>Score: ${score}</p>
         <p>Money left: ${money}€</p>
@@ -139,20 +136,24 @@ document.addEventListener('DOMContentLoaded', () => {
       then(response => response.json()).
       then(data => {
         const playerName = data.name;
+        const score = Math.round(data.score);
         const money = data.money;
         const co2 = Math.round(data.co2);
         const places = data.places_visited;
         const days = data.days;
+        const current = data.location.airport_name;
 
         const gameoverBox = document.querySelector('.pdata');
 
         gameoverBox.innerHTML = `
-        <h1>Stats</h1>
+        <h1>Player Stats:</h1>
         <p>Player: ${playerName}</p>
-        <p>Money: ${money}</p>
+        <p>Score: ${score}</p>
+        <p>Money: ${money}€</p>
         <p>Time: ${days} days</p>
         <p>CO₂: ${co2} g</p>
         <p>Places visited: ${places}</p>
+        <p>Location: ${current}</p>
       `;
       }).
       catch(error => {
