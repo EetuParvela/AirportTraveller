@@ -3,6 +3,7 @@ from flask_cors import CORS
 import database as db
 from Python.game import GameState
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -66,7 +67,16 @@ def work():
     money_gained = game_instance.work(days)
 
     return jsonify({"message": f"Work completed! Gained ${money_gained}€"}), 200
+@app.route('/get_highscore', methods=['GET'])
+def get_highscore_route():
+    scoreboard = db.get_highscore()
+    print(scoreboard)
+
+    return jsonify(scoreboard), 200
 
 
 if __name__ == "__main__":
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
+
+
+

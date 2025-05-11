@@ -5,14 +5,15 @@ import mysql.connector
 from geopy.distance import geodesic
 
 
+
 @contextmanager
 def get_db_connection():
     conn = mysql.connector.connect(
         host='127.0.0.1',
         port=3306,
         database='flight_game',
-        user='eetu',
-        password='mdb21',
+        user='lauri1',
+        password='salis1',
         charset="utf8mb4",
         collation="utf8mb4_general_ci",
         autocommit=True
@@ -154,3 +155,16 @@ def get_closest_airports(current_icao):
             # Järjestää ja palauttaa 5 lähintä lentokenttää
             airports.sort(key=lambda x: x['distance_km'])
             return airports[:5]
+
+
+def get_highscore():
+    with get_db_connection() as conn:
+        with get_db_cursor(conn) as cursor:
+            query = "SELECT player, points FROM highscore ORDER BY points DESC LIMIT 5"
+            cursor.execute(query)
+            results = cursor.fetchall()
+            return [{"player": row["player"], "score": row["points"]} for row in results]
+
+
+ia = get_highscore()
+print(ia)

@@ -1,4 +1,7 @@
-const bounds = L.latLngBounds([30.0, -18.0], [55.0, 45.0]);
+  const bounds = L.latLngBounds(
+    [90, -180], 
+    [-90, 180]  
+  );
 
 const map = L.map('map', {
   minZoom: 3, maxZoom: 10, maxBounds: bounds, maxBoundsViscosity: 1.0,
@@ -13,6 +16,7 @@ loadAirportMarkers(map);
 
 let selectedAirport = null;
 
+
 async function loadAirportMarkers(map) {
   fetch('http://127.0.0.1:3000/get_airports').
       then(res => res.json()).
@@ -24,7 +28,6 @@ async function loadAirportMarkers(map) {
             selectedAirport = marker;
 
             document.getElementById('airportInfo').innerHTML = `
-                <strong>Airport Info:</strong>
                 <h5>${marker.welcome_phrase}</h5>
                 <h5>${marker.airport_name}</h5>
                 <p>ICAO: ${marker.icao}</p>
@@ -35,7 +38,7 @@ async function loadAirportMarkers(map) {
             document.getElementById('flyButton').
                 addEventListener('click', () => {
                   if (selectedAirport) {
-                    handleFly(selectedAirport);
+                    updateLocation(selectedAirport);
                   } else {
                     console.error('No airport selected.');
                   }
@@ -44,20 +47,4 @@ async function loadAirportMarkers(map) {
         }).
             catch(err => console.error('Fetch error:', err));
       });
-}
-
-function handleFly(icao_code) {
-  const icao = icao_code;
-
-  fetch('http://127.0.0.1:3000/fly_to', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({icao}),
-  }).then(response => response.json()).then(data => {
-    if (data.game_over) {
-
-    }
-  }).catch(error => {
-    console.error('Flight error:', error);
-  });
 }
