@@ -10,7 +10,7 @@ CORS(app)
 game_instance = GameState()
 
 
-@app.route('/start_game', methods=['GET'])
+@app.route('/start_game', methods=['POST'])
 def start_game():
     data = request.get_json()
     player_name = data['player_name']
@@ -22,26 +22,31 @@ def start_game():
 
 @app.route("/get_player_info", methods=['GET'])
 def get_player_info():
-    location, money, co2 = game_instance.player.get_player_info()
+    name, location, money, co2, places_visited = game_instance.player.get_player_info()
+    days = game_instance.days
 
     return jsonify({
+        "name": name,
         "location": location,
         "money": money,
-        "co2": co2
+        "co2": co2,
+        "places_visited": places_visited,
+        "days": days
+
     }), 200
 
 
 @app.route('/fly_to', methods=['POST'])
 def fly_to():
     data = request.get_json()
-    icao = data['icao']
+    icao = data['icao']['icao']
 
     if game_instance.fly_to(icao):
         if game_instance.is_over():
             return jsonify({
                 "message": "Flight successful",
                 "game_over": True
-            })
+            }), 200
         else:
             return jsonify({
                 "message": "Flight succesfull",
@@ -49,7 +54,7 @@ def fly_to():
             }), 200
     else:
         return jsonify({"message": "Flight failed. Not enough money",
-                        "game_over": False}), 400
+                        "game_over": False}), 200
 
 
 @app.route('/get_airports', methods=['GET'])
