@@ -143,16 +143,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const co2 = Math.round(data.co2);
         const places = data.places_visited;
         const days = data.days;
+        const current = data.location.airport_name;
 
         const gameoverBox = document.querySelector('.pdata');
 
         gameoverBox.innerHTML = `
         <h1>Stats</h1>
         <p>Player: ${playerName}</p>
-        <p>Money: ${money}</p>
+        <p>Money: ${money}€</p>
         <p>Time: ${days} days</p>
         <p>CO₂: ${co2} g</p>
         <p>Places visited: ${places}</p>
+        <p>Location: ${current}</p>
       `;
       }).
       catch(error => {
