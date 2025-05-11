@@ -103,6 +103,12 @@ def update_highscore():
 
     return jsonify(), 200
 
+@app.route('/get_distance', methods=['GET']) # lähetetään etäisyys lennon hinnan laskettamiseksi
+def get_distance():
+    icao = request.args.get('icao')
+    distance = game_instance.get_distance(icao)
+    return jsonify({'distance': distance}), 200
+
 
 if __name__ == "__main__":
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
