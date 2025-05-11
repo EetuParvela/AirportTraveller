@@ -52,7 +52,7 @@ async function highscore() {
     for (let i = 0; i < scores.length; i++) {
       const li2 = document.createElement('li')
       console.log(i)
-      li2.innerHTML = `${scores[i]['player']}, ${scores[i]['score']}`;
+      li2.innerHTML = `Name: ${scores[i]['player']}, Points: ${scores[i]['score']}`;
       ol2.appendChild(li2)
     }
 
