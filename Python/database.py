@@ -6,6 +6,7 @@ from geopy.distance import geodesic
 from api import game_instance
 import game
 
+
 @contextmanager
 def get_db_connection():
     conn = mysql.connector.connect(
@@ -38,21 +39,6 @@ def calculate_distance(current, target_coords):
     current_coords = (current[0], current[1])
     distance = geodesic(current_coords, target_coords).kilometers
     return distance
-
-
-def get_weather(lat, lon):
-    api_key = os.getenv("API_KEY")  # Suositellaan käytettäväksi ympäristömuuttujia
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
-
-    response = requests.get(url)
-    response.raise_for_status()
-    data = response.json()
-
-    return {
-        "main": data["weather"][0]["main"],
-        "description": data["weather"][0]["description"],
-        "temp": data["main"]["temp"]
-    }
 
 
 # Hankkii yhden lentokentän tiedot tietokannasta
@@ -157,6 +143,7 @@ def get_highscore():
             cursor.execute(query)
             results = cursor.fetchall()
             return [{"player": row["player"], "score": row["points"]} for row in results]
+
 
 def update_database(player, points):
     with get_db_connection() as conn:

@@ -77,7 +77,7 @@ async function handleFly(icao_code) {
     }
 
     if (data.game_over) {
-      window.location.href = 'end1.html';
+      window.location.href = 'end_screen.html';
     }
   }).catch(error => {
     console.error('Flight error:', error);
