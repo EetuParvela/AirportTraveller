@@ -38,7 +38,7 @@ class Player:
         self.places_visited = 0
 
     def check_is_over(self):
-        if self.places_visited == 5:
+        if self.places_visited == 12:
             return True
         return False
 
